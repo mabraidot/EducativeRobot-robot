@@ -1,17 +1,21 @@
 #include "config.h"
 #include "debug.h"
 #include "buzzer.h"
+#include "rf.h"
 
 Buzzer buzzer;
+RF rf;
 
 
-void setup(){
-    if(DEBUG){
-        Serial.begin(9600);
-    }
-
-    buzzer.init();
-    buzzer.startUp();
+void help(){
+  debug.println(F("\nCONSOLE INTERFACE"));
+  debug.println(F("Available commands:"));
+  debug.println(F(""));
+  debug.println(F("H: This help"));
+  debug.println(F("F: Move Forward"));
+  debug.println(F("B: Move Backward"));
+  debug.println(F("L: Turn Left"));
+  debug.println(F("R: Turn Right"));
 }
 
 
@@ -31,15 +35,15 @@ void process_serial(){
     }
 }
 
-void help(){
-  debug.println(F("\nCONSOLE INTERFACE"));
-  debug.println(F("Available commands:"));
-  debug.println(F(""));
-  debug.println(F("H: This help"));
-  debug.println(F("F: Move Forward"));
-  debug.println(F("B: Move Backward"));
-  debug.println(F("L: Turn Left"));
-  debug.println(F("R: Turn Right"));
+
+void setup(){
+    if(DEBUG){
+        Serial.begin(9600);
+    }
+    rf.init();
+    
+    buzzer.init();
+    buzzer.startUp();
 }
 
 
