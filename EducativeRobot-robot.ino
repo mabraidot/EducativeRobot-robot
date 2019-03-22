@@ -2,10 +2,12 @@
 #include "debug.h"
 #include "buzzer.h"
 #include "rf.h"
+#include "encoder.h"
 
 Buzzer buzzer;
 RF rf;
-
+Encoder leftEncoder;
+Encoder rightEncoder;
 
 void help(){
   debug.println(F("\nCONSOLE INTERFACE"));
@@ -36,11 +38,24 @@ void process_serial(){
 }
 
 
+void timerInterrupt(void){
+    leftEncoder.timerInterrupt();
+    rightEncoder.timerInterrupt();
+}
+
+
 void setup(){
     if(DEBUG){
         Serial.begin(9600);
     }
+
+    Timer1.initialize(50);
+    Timer1.attachInterrupt( timerInterrupt );
+
     rf.init();
+
+    leftEncoder.init(MOTOR_LEFT_ENCODER);
+    rightEncoder.init(MOTOR_RIGHT_ENCODER);
     
     buzzer.init();
     buzzer.startUp();
@@ -49,4 +64,23 @@ void setup(){
 
 void loop(){
     if (Serial.available()) process_serial();
+
+
+    // TEST ENCODERS
+    static int serial_interval = 300;
+    static unsigned long serial_timeout = millis() + serial_interval;
+    if(serial_timeout < millis()){
+
+        Serial.print("\nLeft RPM:\t");
+        Serial.print(leftEncoder.getRPM());
+        Serial.print("\tLeft Steps:\t");
+        Serial.println(leftEncoder.getSteps());
+
+        Serial.print("Right RPM:\t");
+        Serial.print(rightEncoder.getRPM());
+        Serial.print("\tRight Steps:\t");
+        Serial.println(rightEncoder.getSteps());
+        
+        serial_timeout = millis() + serial_interval;
+    }
 }

@@ -16,6 +16,11 @@
 #define SENSOR_ULTRASONIC_TRIGGER   A2
 #define SENSOR_ULTRASONIC_ECHO      A3
 
+
+// ENCODER
+#define ENCODER_HOLES               30 * 5 // Motor gear ratio = 1:5, hence the holes multiplication
+#define ENCODER_QUERY_INTERVAL      50 // milliseconds
+
 // RF
 #define RF_CLIENT_ADDRESS           1
 #define RF_SERVER_ADDRESS           2
