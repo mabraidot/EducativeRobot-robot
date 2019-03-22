@@ -11,6 +11,7 @@ class Encoder {
         void timerInterrupt(void);
         uint16_t getRPM(void);
         unsigned long getSteps(void);
+        void clear(void);
 
     private:
 
@@ -25,4 +26,4 @@ class Encoder {
 
 extern Encoder encoder;
 
-#endif //ENCODER_HENCODER
+#endif //ENCODER_H

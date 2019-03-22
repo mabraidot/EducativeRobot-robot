@@ -21,6 +21,12 @@ unsigned long Encoder::getSteps(void){
 }
 
 
+void Encoder::clear(void){
+    _RPM_counter = 0;
+    _steps = 0;
+}
+
+
 void Encoder::timerInterrupt(void){
     
     if(_read_timeout < millis()){
