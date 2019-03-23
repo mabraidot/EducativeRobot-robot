@@ -74,12 +74,21 @@ boolean RF::receiveMessageTimeout(uint16_t timeout){
 }
 
 
-byte RF::getNumberFromMessage(uint8_t *message, byte units){
+/*byte RF::getNumberFromMessage(uint8_t *message, byte units){
 
     //byte number = ((byte)message[0]-48)*10 + (byte)message[1]-48; //units=2
     byte number = 0;
     for(byte i = 0; i < units; i++){
         number += ( (byte)message[( units-i-1 )] - 48 ) * pow(10,i);
+    }
+    return number;
+
+}*/
+byte RF::getNumberFromMessage(byte units){
+
+    byte number = 0;
+    for(byte i = 0; i < units; i++){
+        number += ( (byte)_buffer[( units-i-1 )] - 48 ) * pow(10,i);
     }
     return number;
 

@@ -1,9 +1,11 @@
 #include "config.h"
 #include "debug.h"
 #include "buzzer.h"
+#include "compiler.h"
 #include "rf.h"
 
 Buzzer buzzer;
+Compiler compiler;
 RF rf;
 
 
@@ -41,7 +43,8 @@ void setup(){
         Serial.begin(9600);
     }
     rf.init();
-    
+    compiler.init();
+
     buzzer.init();
     buzzer.startUp();
 }
@@ -49,4 +52,6 @@ void setup(){
 
 void loop(){
     if (Serial.available()) process_serial();
+
+    compiler.run();
 }

@@ -12,7 +12,8 @@ class RF {
         boolean sendMessage(byte number);
         boolean receiveMessage(void);
         boolean RF::receiveMessageTimeout(uint16_t timeout);
-        byte getNumberFromMessage(uint8_t *message, byte units);
+        //byte getNumberFromMessage(uint8_t *message, byte units);
+        byte getNumberFromMessage(byte units);
         
         int action_wait_interval = 7000;
         unsigned long action_wait_timeout = millis() + action_wait_interval;
