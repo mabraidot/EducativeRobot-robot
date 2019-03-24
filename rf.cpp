@@ -14,7 +14,6 @@ RHReliableDatagram manager(driver, RF_CLIENT_ADDRESS);
 
 void RF::init(void){
 
-    uint8_t _buffer[RH_NRF24_MAX_MESSAGE_LEN] = {0};
     if (!manager.init()){
         debug.println(F("RF init failed"));
     }
@@ -59,10 +58,18 @@ boolean RF::sendMessage(byte number, bool ack){
 }
 
 
+boolean RF::sendMessage(char text[], bool ack){
+
+    uint8_t message[RH_NRF24_MAX_MESSAGE_LEN] = {0};
+    sprintf(message, "%s", text);
+
+    return sendMessage(message, ack);
+}
+
+
 boolean RF::receiveMessage(void){
 
-    uint8_t _buffer[RH_NRF24_MAX_MESSAGE_LEN] = {0};
-
+    memset(_buffer, 0, _len);
     return manager.recvfromAck(_buffer, &_len, &_from);
 
 }
@@ -70,10 +77,14 @@ boolean RF::receiveMessage(void){
 
 boolean RF::receiveMessageTimeout(uint16_t timeout){
 
-    uint8_t _buffer[RH_NRF24_MAX_MESSAGE_LEN] = {0};
-
+    memset(_buffer, 0, _len);
     return manager.recvfromAckTimeout(_buffer, &_len, timeout, &_from);
     
+}
+
+
+char* RF::getBuffer(){
+    return (char*)_buffer;
 }
 
 

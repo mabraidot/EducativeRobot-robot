@@ -24,12 +24,14 @@ void Compiler::run(void){
     // No instruction received
     if(_action == 0){
         if(rf.receiveMessage()){
+            debug.print("Buffer: ");
+            debug.println(rf.getBuffer());
             _action = rf.getNumberFromMessage(0, 2);
             debug.print("Action: ");
             debug.println(_action);
             action_timeout = millis() + action_interval;
 
-            if(!rf.sendMessage(99, true)){
+            if(!rf.sendMessage("ACK", true)){
                 debug.println("RF send ACK response failed");
             }
         }
@@ -41,7 +43,7 @@ void Compiler::run(void){
             action_timeout = millis() + action_interval;
             
             // Send finishing code
-            if(!rf.sendMessage(99, true)){
+            if(!rf.sendMessage("END", true)){
                 debug.println("RF send of finishing code failed");
             }
             _action = 0;
