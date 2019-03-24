@@ -18,6 +18,7 @@ class Encoder {
         int _pin;
         unsigned long _steps = 0;
         uint16_t _RPM = 0;
+        unsigned long _RPM_counter;
         uint16_t _survey_interval = ENCODER_QUERY_INTERVAL;
         unsigned long _read_timeout = millis() + _survey_interval;
         

@@ -35,5 +35,5 @@
 
 
 // GENERAL
-#define DEBUG                       true
+#define DEBUG                       false
 #define SILENT                      false

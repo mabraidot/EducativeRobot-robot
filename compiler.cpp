@@ -21,7 +21,7 @@ void Compiler::run(void){
     // No instruction received
     if(_action == 0){
         if(rf.receiveMessage()){
-            _action = rf.getNumberFromMessage(2);
+            _action = rf.getNumberFromMessage(0, 2);
             debug.print("Action: ");
             debug.println(_action);
         }
