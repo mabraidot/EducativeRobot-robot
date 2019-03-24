@@ -62,6 +62,7 @@ void led(bool red, bool yellow, bool blue){
     digitalWrite(LIGHT_BLUE, blue);
 }
 
+
 void timerInterrupt(void){
     leftEncoder.timerInterrupt();
     rightEncoder.timerInterrupt();
@@ -94,7 +95,7 @@ void loop(){
     compiler.run();
 
     // TEST ENCODERS
-    static byte luz = 0;
+    /*static byte luz = 0;
     static int serial_interval = 3000;
     static unsigned long serial_timeout = millis() + serial_interval;
     if(serial_timeout < millis()){
@@ -123,5 +124,5 @@ void loop(){
         if(luz >= 7){luz = 0;};
         
         serial_timeout = millis() + serial_interval;
-    }
+    }*/
 }

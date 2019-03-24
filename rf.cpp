@@ -22,7 +22,7 @@ void RF::init(void){
 }
 
 
-boolean RF::sendMessage(uint8_t *message){
+boolean RF::sendMessage(uint8_t *message, bool ack){
 
     uint8_t text[RH_NRF24_MAX_MESSAGE_LEN] = {0};
     strcpy(text, message);
@@ -30,15 +30,18 @@ boolean RF::sendMessage(uint8_t *message){
     debug.print(F("RF Sending: "));
     debug.println((char *)text);
     sent = false;
-    if (manager.sendtoWait((uint8_t *)text, sizeof(text), RF_CLIENT_ADDRESS)){
-        if(receiveMessageTimeout(2000)){
-            debug.print(F("RF ACK Response: "));
-            debug.println((char *)_buffer);
-            sent = true;
-        }else{
-            debug.println(F("RF No reply, is nrf24_reliable_datagram_client running?"));
-            sent = false;
+    if (manager.sendtoWait((uint8_t *)text, sizeof(text), RF_SERVER_ADDRESS)){
+        if(!ack){
+            if(receiveMessageTimeout(2000)){
+                debug.print(F("RF ACK Response: "));
+                debug.println((char *)_buffer);
+                sent = true;
+            }else{
+                debug.println(F("RF No reply, is nrf24_reliable_datagram_client running?"));
+                sent = false;
+            }
         }
+        sent = true;
     }else{
         debug.println(F("RF sendtoWait failed"));
         sent = false;
@@ -47,12 +50,12 @@ boolean RF::sendMessage(uint8_t *message){
 }
 
 
-boolean RF::sendMessage(byte number){
+boolean RF::sendMessage(byte number, bool ack){
 
     uint8_t message[RH_NRF24_MAX_MESSAGE_LEN] = {0};
     sprintf(message, "%02d", number);
 
-    return sendMessage(message);
+    return sendMessage(message, ack);
 }
 
 
@@ -74,18 +77,9 @@ boolean RF::receiveMessageTimeout(uint16_t timeout){
 }
 
 
-/*byte RF::getNumberFromMessage(uint8_t *message, byte units){
-
-    //byte number = ((byte)message[0]-48)*10 + (byte)message[1]-48; //units=2
-    byte number = 0;
-    for(byte i = 0; i < units; i++){
-        number += ( (byte)message[( units-i-1 )] - 48 ) * pow(10,i);
-    }
-    return number;
-
-}*/
 byte RF::getNumberFromMessage(byte start, byte units){
 
+    //byte number = ((byte)message[0]-48)*10 + (byte)message[1]-48; //start=0, units=2
     byte number = 0;
     for(byte i = start; i < units; i++){
         number += ( (byte)_buffer[( units-i-1 )] - 48 ) * pow(10,i);

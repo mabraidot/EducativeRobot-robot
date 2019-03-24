@@ -16,6 +16,9 @@ void Compiler::init(void){
 }
 
 
+// Test RF
+static int action_interval = 4000;
+static unsigned long action_timeout = millis() + action_interval;
 void Compiler::run(void){
 
     // No instruction received
@@ -24,19 +27,22 @@ void Compiler::run(void){
             _action = rf.getNumberFromMessage(0, 2);
             debug.print("Action: ");
             debug.println(_action);
+            action_timeout = millis() + action_interval;
+
+            if(!rf.sendMessage(99, true)){
+                debug.println("RF send ACK response failed");
+            }
         }
     }
 
     // Instruction was received
-    static int action_interval = 4000;
-    static unsigned long action_timeout = millis() + action_interval;
     if(_action > 0){
         if(action_timeout < millis()){
             action_timeout = millis() + action_interval;
             
             // Send finishing code
-            if(!rf.sendMessage(99)){
-                debug.print("RF send of finishing code failed");
+            if(!rf.sendMessage(99, true)){
+                debug.println("RF send of finishing code failed");
             }
             _action = 0;
         }
