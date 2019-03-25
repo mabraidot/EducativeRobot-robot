@@ -30,7 +30,7 @@ void Encoder::clear(void){
 void Encoder::timerInterrupt(void){
     
     _micros += 50; //ISR is called each 50us
-    if(_RPM_read_timeout < (_micros*1000)){
+    if(((_micros*1000) - _RPM_read_timeout) > ENCODER_RPM_QUERY_INTERVAL){
         _RPM = (float) (_RPM_counter * 60 * 1000) / (ENCODER_HOLES * ENCODER_RPM_QUERY_INTERVAL);
         _RPM_counter = 0;
         
