@@ -18,8 +18,8 @@
 
 
 // ENCODER
-#define ENCODER_HOLES               30 * 5  // Motor gear ratio = 1:5, hence the holes multiplication
-#define ENCODER_QUERY_INTERVAL      50      // milliseconds
+#define ENCODER_HOLES               30 //30 * 5  // Motor gear ratio = 1:5, hence the holes multiplication
+#define ENCODER_RPM_QUERY_INTERVAL  200      // milliseconds
 
 // RF
 #define RF_CLIENT_ADDRESS           1

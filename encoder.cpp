@@ -7,7 +7,7 @@
 
 void Encoder::init(int pin){
     _pin = pin;
-    pinMode(_pin, INPUT);
+    pinMode(_pin, INPUT_PULLUP);
 }
 
 
@@ -29,19 +29,20 @@ void Encoder::clear(void){
 
 void Encoder::timerInterrupt(void){
     
-    if(_read_timeout < millis()){
-
-        _RPM = (60 * 1000 / ENCODER_HOLES ) / ENCODER_QUERY_INTERVAL * _RPM_counter;
+    _millis += 50;
+    if(_RPM_read_timeout < _millis){
+        //_RPM = (60 * 1000 / ENCODER_HOLES ) / ENCODER_RPM_QUERY_INTERVAL * _RPM_counter;
+        _RPM = (uint16_t) ((_RPM_counter * 60 * 1000) / (ENCODER_HOLES * ENCODER_RPM_QUERY_INTERVAL));
         _RPM_counter = 0;
-
-        _read_timeout = millis() + ENCODER_QUERY_INTERVAL;
+        
+        _RPM_read_timeout = _millis + ENCODER_RPM_QUERY_INTERVAL;
     }
 
     // DEBOUNCING
     // http://www.embedded.com/electronics-blogs/break-points/4024981/My-favorite-software-debouncers
-    static uint16_t state = 0;
-    state = (state << 1) | !digitalRead(_pin) | 0xe000;
-    if(state == 0xf000){
+    static uint16_t _state = 0;
+    _state = (_state << 1) | !digitalRead(_pin) | 0xe000;
+    if(_state == 0xf000){
         _RPM_counter++;
         _steps++;
     }

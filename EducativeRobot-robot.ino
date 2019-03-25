@@ -63,7 +63,7 @@ void led(bool red, bool yellow, bool blue){
 }
 
 
-void timerInterrupt(void){
+void timerISR(void){
     leftEncoder.timerInterrupt();
     rightEncoder.timerInterrupt();
 }
@@ -74,15 +74,15 @@ void setup(){
         Serial.begin(9600);
     }
 
+    leftEncoder.init(MOTOR_LEFT_ENCODER);
+    rightEncoder.init(MOTOR_RIGHT_ENCODER);
     Timer1.initialize(50);
-    Timer1.attachInterrupt( timerInterrupt );
+    Timer1.attachInterrupt( timerISR );
 
     rf.init();
     compiler.init();
 
 
-    leftEncoder.init(MOTOR_LEFT_ENCODER);
-    rightEncoder.init(MOTOR_RIGHT_ENCODER);
     
     buzzer.init();
     buzzer.startUp();
@@ -95,22 +95,22 @@ void loop(){
     compiler.run();
 
     // TEST ENCODERS
-    /*static byte luz = 0;
-    static int serial_interval = 3000;
+    //static byte luz = 0;
+    static int serial_interval = 150;
     static unsigned long serial_timeout = millis() + serial_interval;
     if(serial_timeout < millis()){
 
         Serial.print("\nLeft RPM:\t");
         Serial.print(leftEncoder.getRPM());
-        Serial.print("\tLeft Steps:\t");
+        Serial.print("\tLeft Steps:\t\t");
         Serial.println(leftEncoder.getSteps());
 
         Serial.print("Right RPM:\t");
         Serial.print(rightEncoder.getRPM());
         Serial.print("\tRight Steps:\t");
         Serial.println(rightEncoder.getSteps());
-
-        switch(luz){
+        
+        /*switch(luz){
             case 0: led(0,0,0); break;
             case 1: led(1,0,0); break;
             case 2: led(0,1,0); break;
@@ -121,8 +121,8 @@ void loop(){
         }
 
         luz++;
-        if(luz >= 7){luz = 0;};
+        if(luz >= 7){luz = 0;};*/
         
         serial_timeout = millis() + serial_interval;
-    }*/
+    }
 }
