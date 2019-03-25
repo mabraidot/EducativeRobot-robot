@@ -21,6 +21,11 @@
 #define ENCODER_HOLES               30 //30 * 5  // Motor gear ratio = 1:5, hence the holes multiplication
 #define ENCODER_RPM_QUERY_INTERVAL  500      // milliseconds
 
+// LIGHT
+#define STATE_LED_OFF               0
+#define STATE_LED_ON                1
+#define STATE_LED_BLINK             2
+
 // RF
 #define RF_CLIENT_ADDRESS           1
 #define RF_SERVER_ADDRESS           2

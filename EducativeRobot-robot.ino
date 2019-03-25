@@ -11,6 +11,7 @@ Compiler compiler;
 RF rf;
 Encoder leftEncoder;
 Encoder rightEncoder;
+Light light;
 
 void help(){
   debug.println(F("\nCONSOLE INTERFACE"));
@@ -56,10 +57,11 @@ void process_serial(){
     }
 }
 
+// test led
 void led(bool red, bool yellow, bool blue){
-    digitalWrite(LIGHT_RED, red);
-    digitalWrite(LIGHT_YELLOW, yellow);
-    digitalWrite(LIGHT_BLUE, blue);
+    light.led(LIGHT_RED, red)
+    light.led(LIGHT_YELLOW, yellow)
+    light.led(LIGHT_BLUE, blue)
 }
 
 
@@ -86,7 +88,7 @@ void setup(){
     rf.init();
     compiler.init();
 
-
+    light.init();
     
     buzzer.init();
     buzzer.startUp();
@@ -99,7 +101,6 @@ void loop(){
     compiler.run();
 
     // TEST ENCODERS
-    //static byte luz = 0;
     static int serial_interval = 150;
     static unsigned long serial_timeout = millis() + serial_interval;
     if(serial_timeout < millis()){
@@ -113,19 +114,6 @@ void loop(){
         Serial.print(rightEncoder.getRPM());
         Serial.print("\tRight Steps:\t");
         Serial.println(rightEncoder.getSteps());
-        
-        /*switch(luz){
-            case 0: led(0,0,0); break;
-            case 1: led(1,0,0); break;
-            case 2: led(0,1,0); break;
-            case 3: led(0,0,1); break;
-            case 4: led(1,1,0); break;
-            case 5: led(0,1,1); break;
-            case 6: led(1,0,1); break;
-        }
-
-        luz++;
-        if(luz >= 7){luz = 0;};*/
         
         serial_timeout = millis() + serial_interval;
     }
