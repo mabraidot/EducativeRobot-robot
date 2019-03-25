@@ -13,7 +13,7 @@ void Light::init(void){
 }
 
 
-void led(byte color, byte mode){
+void Light::led(byte color, byte mode){
     
     if(mode == STATE_LED_BLINK){
       static byte led_on = 1;

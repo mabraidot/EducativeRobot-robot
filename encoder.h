@@ -9,7 +9,7 @@ class Encoder {
 
         void init(int pin);
         void timerInterrupt(void);
-        float getRPM(void);
+        uint16_t getRPM(void);
         unsigned long getSteps(void);
         void clear(void);
 
@@ -17,7 +17,7 @@ class Encoder {
 
         int _pin;
         volatile unsigned long _steps = 0;
-        volatile float _RPM = 0;
+        volatile unsigned long _RPM = 0;
         volatile unsigned long _RPM_counter = 0;
         volatile unsigned long _micros = 0;
         volatile unsigned long _RPM_read_timeout = millis() + ENCODER_RPM_QUERY_INTERVAL;

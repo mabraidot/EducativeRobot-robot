@@ -5,6 +5,9 @@
 #include "compiler.h"
 #include "rf.h"
 #include "encoder.h"
+#include "light.h"
+//#include "motor.h"
+
 
 Buzzer buzzer;
 Compiler compiler;
@@ -12,8 +15,8 @@ RF rf;
 Light light;
 Encoder leftEncoder;
 Encoder rightEncoder;
-Motor leftMotor = Motor(leftEncoder, MOTOR_LEFT_INPUT_1, MOTOR_LEFT_INPUT_2);
-Motor rightMotor = Motor(rightEncoder, MOTOR_RIGHT_INPUT_1, MOTOR_RIGHT_INPUT_2);
+//Motor leftMotor = Motor(MOTOR_LEFT_ENCODER, MOTOR_LEFT_INPUT_1, MOTOR_LEFT_INPUT_2);
+//Motor rightMotor = Motor(MOTOR_RIGHT_ENCODER, MOTOR_RIGHT_INPUT_1, MOTOR_RIGHT_INPUT_2);
 
 
 void help(){
@@ -62,9 +65,9 @@ void process_serial(){
 
 // test led
 void led(bool red, bool yellow, bool blue){
-    light.led(LIGHT_RED, red)
-    light.led(LIGHT_YELLOW, yellow)
-    light.led(LIGHT_BLUE, blue)
+    light.led(LIGHT_RED, red);
+    light.led(LIGHT_YELLOW, yellow);
+    light.led(LIGHT_BLUE, blue);
 }
 
 
@@ -73,6 +76,8 @@ void timerISR(void){
 
     leftEncoder.timerInterrupt();
     rightEncoder.timerInterrupt();
+    //leftMotor.encoder->timerInterrupt();
+    //rightMotor.encoder->timerInterrupt();
     
     Timer1.attachInterrupt( timerISR );
 }
@@ -87,14 +92,15 @@ void setup(){
     rightEncoder.init(MOTOR_RIGHT_ENCODER);
     Timer1.initialize(50);
     Timer1.attachInterrupt( timerISR );
-    
+
     rf.init();
     compiler.init();
 
-    light.init();
+    //light.init();
     
     buzzer.init();
     buzzer.startUp();
+
 }
 
 
@@ -104,18 +110,22 @@ void loop(){
     compiler.run();
 
     // TEST ENCODERS
-    static int serial_interval = 150;
+    static int serial_interval = 300;
     static unsigned long serial_timeout = millis() + serial_interval;
     if(serial_timeout < millis()){
 
         Serial.print("\nLeft RPM:\t");
+        //Serial.print(leftMotor.encoder->getRPM());
         Serial.print(leftEncoder.getRPM());
         Serial.print("\tLeft Steps:\t\t");
+        //Serial.println(leftMotor.encoder->getSteps());
         Serial.println(leftEncoder.getSteps());
 
         Serial.print("Right RPM:\t");
+        //Serial.print(rightMotor.encoder->getRPM());
         Serial.print(rightEncoder.getRPM());
         Serial.print("\tRight Steps:\t");
+        //Serial.println(rightMotor.encoder->getSteps());
         Serial.println(rightEncoder.getSteps());
         
         serial_timeout = millis() + serial_interval;

@@ -8,7 +8,7 @@ class Motor {
 
     public:
 
-        Motor(Encoder &encoder, int input1, int input2);
+        Motor(int encoder_pin, int input1, int input2);
 
         void run(void);
         void stop(void);
@@ -17,8 +17,8 @@ class Motor {
         //float getSpeed(void);
         void setSpeed(float rpm);
 
-        Encoder &encoder;
-        PID &speedPID;
+        Encoder *encoder;
+        PID *speedPID;
     
     private:
 
