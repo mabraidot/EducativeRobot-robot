@@ -11,7 +11,7 @@ void Encoder::init(int pin){
 }
 
 
-uint16_t Encoder::getRPM(void){
+float Encoder::getRPM(void){
     return _RPM;
 }
 
@@ -29,18 +29,17 @@ void Encoder::clear(void){
 
 void Encoder::timerInterrupt(void){
     
-    _millis += 50;
-    if(_RPM_read_timeout < _millis){
-        //_RPM = (60 * 1000 / ENCODER_HOLES ) / ENCODER_RPM_QUERY_INTERVAL * _RPM_counter;
-        _RPM = (uint16_t) ((_RPM_counter * 60 * 1000) / (ENCODER_HOLES * ENCODER_RPM_QUERY_INTERVAL));
+    _micros += 50; //ISR is called each 50us
+    if(_RPM_read_timeout < (_micros*1000)){
+        _RPM = (float) (_RPM_counter * 60 * 1000) / (ENCODER_HOLES * ENCODER_RPM_QUERY_INTERVAL);
         _RPM_counter = 0;
         
-        _RPM_read_timeout = _millis + ENCODER_RPM_QUERY_INTERVAL;
+        _RPM_read_timeout = (_micros*1000) + ENCODER_RPM_QUERY_INTERVAL;
     }
 
     // DEBOUNCING
     // http://www.embedded.com/electronics-blogs/break-points/4024981/My-favorite-software-debouncers
-    static uint16_t _state = 0;
+    static volatile uint16_t _state = 0;
     _state = (_state << 1) | !digitalRead(_pin) | 0xe000;
     if(_state == 0xf000){
         _RPM_counter++;

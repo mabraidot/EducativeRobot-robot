@@ -64,8 +64,12 @@ void led(bool red, bool yellow, bool blue){
 
 
 void timerISR(void){
+    Timer1.detachInterrupt();
+
     leftEncoder.timerInterrupt();
     rightEncoder.timerInterrupt();
+    
+    Timer1.attachInterrupt( timerISR );
 }
 
 
