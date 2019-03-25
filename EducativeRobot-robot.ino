@@ -9,9 +9,12 @@
 Buzzer buzzer;
 Compiler compiler;
 RF rf;
+Light light;
 Encoder leftEncoder;
 Encoder rightEncoder;
-Light light;
+Motor leftMotor = Motor(leftEncoder, MOTOR_LEFT_INPUT_1, MOTOR_LEFT_INPUT_2);
+Motor rightMotor = Motor(rightEncoder, MOTOR_RIGHT_INPUT_1, MOTOR_RIGHT_INPUT_2);
+
 
 void help(){
   debug.println(F("\nCONSOLE INTERFACE"));
@@ -84,7 +87,7 @@ void setup(){
     rightEncoder.init(MOTOR_RIGHT_ENCODER);
     Timer1.initialize(50);
     Timer1.attachInterrupt( timerISR );
-
+    
     rf.init();
     compiler.init();
 
