@@ -6,7 +6,7 @@
 #include "rf.h"
 #include "encoder.h"
 #include "light.h"
-//#include "motor.h"
+#include "motor.h"
 
 
 Buzzer buzzer;
@@ -65,9 +65,11 @@ void process_serial(){
 
 // test led
 void led(bool red, bool yellow, bool blue){
+    
     light.led(LIGHT_RED, red);
     light.led(LIGHT_YELLOW, yellow);
     light.led(LIGHT_BLUE, blue);
+    
 }
 
 
@@ -90,13 +92,13 @@ void setup(){
 
     leftEncoder.init(MOTOR_LEFT_ENCODER);
     rightEncoder.init(MOTOR_RIGHT_ENCODER);
-    Timer1.initialize(50);
+    Timer1.initialize(ENCODER_ISR_QUERY_INTERVAL);
     Timer1.attachInterrupt( timerISR );
 
     rf.init();
     compiler.init();
 
-    //light.init();
+    light.init();
     
     buzzer.init();
     buzzer.startUp();

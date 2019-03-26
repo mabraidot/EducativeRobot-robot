@@ -18,8 +18,9 @@
 
 
 // ENCODER
-#define ENCODER_HOLES               30 //30 * 5  // Motor gear ratio = 1:5, hence the holes multiplication
-#define ENCODER_RPM_QUERY_INTERVAL  500      // milliseconds
+#define ENCODER_HOLES               30 * 5  // Motor gear ratio = 1:5, hence the holes multiplication
+#define ENCODER_ISR_QUERY_INTERVAL  500      // microseconds
+#define ENCODER_RPM_QUERY_INTERVAL  200000   // microseconds
 
 // MOTOR
 #define MOTOR_PID_kP                0.00
