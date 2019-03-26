@@ -8,8 +8,9 @@ class Motor {
 
     public:
 
-        Motor(int encoder_pin, int input1, int input2);
+        Motor(void);
 
+        void init(int encoder_pin, int input1, int input2);
         void run(void);
         void stop(void);
         void move(int new_position);
