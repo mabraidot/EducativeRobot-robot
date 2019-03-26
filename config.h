@@ -19,6 +19,8 @@
 
 // ENCODER
 #define ENCODER_HOLES               30 * 5  // Motor gear ratio = 1:5, hence the holes multiplication
+#define WHEEL_CIRCUMFERENCE         25      // Wheel circumference in cm
+#define ENCODER_STEPS_X_CM          ENCODER_HOLES / WHEEL_CIRCUMFERENCE
 #define ENCODER_ISR_QUERY_INTERVAL  500      // microseconds
 #define ENCODER_RPM_QUERY_INTERVAL  200000   // microseconds
 
