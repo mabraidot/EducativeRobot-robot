@@ -25,7 +25,7 @@
 #define ENCODER_RPM_QUERY_INTERVAL  200000   // microseconds
 
 // MOTOR
-#define MOTOR_PID_kP                0.00
+#define MOTOR_PID_kP                5.00
 #define MOTOR_PID_kI                0.00
 #define MOTOR_PID_kD                0.00
 

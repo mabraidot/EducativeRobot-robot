@@ -18,6 +18,8 @@ void Motor::init(int encoder_pin, int input1, int input2){
     _pin2 = input2;
     pinMode(input1, OUTPUT);
     pinMode(input2, OUTPUT);
+    analogWrite(input1, 0);
+    analogWrite(input2, 0);
 
     speedPID->SetSampleTime(50);
     speedPID->SetOutputLimits(0,255);
@@ -43,9 +45,10 @@ void Motor::move(int new_position, byte rpm){
     new_position = (double) new_position * ENCODER_STEPS_X_CM;
 
     if(_position != new_position){
+        stop();
         encoder->clear();
-        _PID_setpoint = rpm;
-        _position = new_position;
+        _PID_setpoint = (double) rpm;
+        _position = abs(new_position);
         _position_direction = new_position/abs(new_position);
     }
 
@@ -72,15 +75,15 @@ void Motor::stop(void){
 
 void Motor::run(void){
 
-    if(finished()){
+    if(finished() || _position <= 0){
         stop();
     }else{
 
         unsigned long steps = encoder->getSteps();
         _PID_input = (double) encoder->getRPM();
         speedPID->Compute();
-        _PWM = (int) abs(_PID_output);
         speedPID->SetMode(AUTOMATIC);
+        _PWM = (int) abs(_PID_output);
         
         if((float)steps <= float(_position/10)){
             // If we are on the first 10% of the trajectory
@@ -94,6 +97,27 @@ void Motor::run(void){
 
             // @todo: modify _PWM with inverted sigmoid function (max of _PID_setpoint)
 
+        }
+
+        static unsigned long serial_timeout = millis() + 100;
+        if(serial_timeout < millis()){
+            debug.print(F("\nSteps setpoint: "));
+            debug.print((byte) _position);
+            //Serial.print(_position);
+            debug.print(F("\tSteps: "));
+            debug.print((byte)steps);
+            //Serial.print(steps);
+            debug.print(F("\t_PWM: "));
+            debug.print((byte)_PWM);
+            //Serial.print(_PWM);
+            debug.print(F("\tRPM setpoint: "));
+            debug.print((byte)_PID_setpoint);
+            //Serial.print(_PID_setpoint);
+            debug.print(F("\tRPM: "));
+            debug.println((byte)_PID_input);
+            //Serial.println((byte)_PID_input);
+
+            serial_timeout = millis() + 1000;
         }
 
         if(_position_direction < 0){    // Backward

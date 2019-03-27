@@ -21,29 +21,24 @@ void help(){
   debug.println(F("Available commands:"));
   debug.println(F(""));
   debug.println(F("H: This help"));
-  debug.println(F("MF: Move Forward"));
-  debug.println(F("MB: Move Backward"));
-  debug.println(F("ML: Turn Left"));
-  debug.println(F("MR: Turn Right"));
+  debug.println(F("M<cm_left>,<cm_right>,<speed>: Move Motors"));
+  debug.println(F("L<red>,<yellow>,<blue>: Turn on LEDs"));
 }
 
 
 void process_serial(){
     if(DEBUG){
         char cmd = Serial.read();
-        byte address;
         if (cmd > 'Z') cmd -= 32;
         switch (cmd) {
             case 'H': help(); break;
             case 'M': 
                 {
-                    byte mode = Serial.read();
-                    switch(mode) {
-                        case 'F': /*Move forward*/ break;
-                        case 'B': /*Move backward*/ break;
-                        case 'L': /*Move left*/ break;
-                        case 'R': /*Move right*/ break;
-                    }
+                    int cml = (int) Serial.parseInt();
+                    int cmr = (int) Serial.parseInt();
+                    byte speed = (byte) Serial.parseInt();
+                    leftMotor.move(cml, speed);
+                    rightMotor.move(cmr, speed);
                 }
                 break;
             case 'L': 
@@ -51,22 +46,15 @@ void process_serial(){
                     bool red = Serial.parseInt();
                     bool yellow = Serial.parseInt();
                     bool blue = Serial.parseInt();
-                    led(red, yellow, blue); 
+                    light.led(LIGHT_RED, red);
+                    light.led(LIGHT_YELLOW, yellow);
+                    light.led(LIGHT_BLUE, blue);
                 }
                 break;
             
         }
         while (Serial.read() != 10); // dump extra characters till LF is seen (you can use CRLF or just LF)
     }
-}
-
-// test led
-void led(bool red, bool yellow, bool blue){
-    
-    light.led(LIGHT_RED, red);
-    light.led(LIGHT_YELLOW, yellow);
-    light.led(LIGHT_BLUE, blue);
-    
 }
 
 
@@ -108,25 +96,7 @@ void loop(){
 
     compiler.run();
 
-    // TEST ENCODERS
-    static int serial_interval = 500;
-    static unsigned long serial_timeout = millis() + serial_interval;
-    if(serial_timeout < millis()){
+    //leftMotor.run();
+    rightMotor.run();
 
-        Serial.print("\nLeft RPM:\t");
-        Serial.print(leftMotor.encoder->getRPM());
-        //Serial.print(leftEncoder.getRPM());
-        Serial.print("\tLeft Steps:\t\t");
-        Serial.println(leftMotor.encoder->getSteps());
-        //Serial.println(leftEncoder.getSteps());
-
-        Serial.print("Right RPM:\t");
-        Serial.print(rightMotor.encoder->getRPM());
-        //Serial.print(rightEncoder.getRPM());
-        Serial.print("\tRight Steps:\t");
-        Serial.println(rightMotor.encoder->getSteps());
-        //Serial.println(rightEncoder.getSteps());
-        
-        serial_timeout = millis() + serial_interval;
-    }
 }
