@@ -81,39 +81,29 @@ void Motor::run(void){
 
         unsigned long steps = encoder->getSteps();
         _PID_input = (double) encoder->getRPM();
+            
         speedPID->SetMode(AUTOMATIC);
         speedPID->Compute();
         _PWM = (int) abs(_PID_output);
 
-        if((float)steps <= float(_position/10)){
-            // If we are on the first 10% of the trajectory
-            // calculate the ascendent ramp
-
-            // @todo: modify _PWM with sigmoid function (max of _PID_setpoint)
-
-        }else if((float)steps >= float(_position - (_position/10))){
-            // If we are on the last 10% of the trajectory
-            // calculate the descendent ramp
-
-            // @todo: modify _PWM with inverted sigmoid function (max of _PID_setpoint)
-
-        }
-
-        static int serial_timelapse = 1000;
-        static unsigned long serial_timeout = millis() + serial_timelapse;
-        if(serial_timeout < millis()){
-            debug.print("\nSteps setpoint: ");
-            debug.print(_position);
-            debug.print("\tSteps: ");
-            debug.print((double)steps);
-            debug.print("\t| _PWM: ");
-            debug.print((byte)_PWM);
-            debug.print("\t| RPM setpoint: ");
-            debug.print(_PID_setpoint);
-            debug.print("\tRPM: ");
-            debug.println(_PID_input);
-            
-            serial_timeout = millis() + serial_timelapse;
+        
+        if(DEBUG){
+            static int serial_timelapse = 1000;
+            static unsigned long serial_timeout = millis() + serial_timelapse;
+            if(serial_timeout < millis()){
+                debug.print("Steps setpoint: ");
+                debug.print(_position);
+                debug.print("\t| Steps: ");
+                debug.print((double)steps);
+                debug.print("\t| _PWM: ");
+                debug.print((byte)_PWM);
+                debug.print("\t| RPM setpoint: ");
+                debug.print(_PID_setpoint);
+                debug.print("\t| RPM: ");
+                debug.println(_PID_input);
+                
+                serial_timeout = millis() + serial_timelapse;
+            }
         }
 
         if(_position_direction < 0){    // Backward
