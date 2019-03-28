@@ -2,13 +2,13 @@
 #include "config.h"
 #include "debug.h"
 #include "motor.h"
-
+#include "pwm.h"
 
 Motor::Motor(void){
 
     speedPID = new PID(&_PID_input, &_PID_output, &_PID_setpoint,1,1,0, DIRECT);
     encoder = new Encoder();
-    
+
 }
 
 
@@ -47,7 +47,7 @@ void Motor::move(int new_position, byte rpm){
     if(_position != new_position){
         stop();
         encoder->clear();
-        _PID_setpoint = (double) rpm;
+        _PID_setpoint = (double) rpm * WHEEL_GEAR_RATIO;
         _position = abs(new_position);
         _position_direction = new_position/abs(new_position);
     }
@@ -81,10 +81,10 @@ void Motor::run(void){
 
         unsigned long steps = encoder->getSteps();
         _PID_input = (double) encoder->getRPM();
-        speedPID->Compute();
         speedPID->SetMode(AUTOMATIC);
+        speedPID->Compute();
         _PWM = (int) abs(_PID_output);
-        
+
         if((float)steps <= float(_position/10)){
             // If we are on the first 10% of the trajectory
             // calculate the ascendent ramp
@@ -99,33 +99,29 @@ void Motor::run(void){
 
         }
 
-        static unsigned long serial_timeout = millis() + 100;
+        static int serial_timelapse = 1000;
+        static unsigned long serial_timeout = millis() + serial_timelapse;
         if(serial_timeout < millis()){
-            debug.print(F("\nSteps setpoint: "));
-            debug.print((byte) _position);
-            //Serial.print(_position);
-            debug.print(F("\tSteps: "));
-            debug.print((byte)steps);
-            //Serial.print(steps);
-            debug.print(F("\t_PWM: "));
+            debug.print("\nSteps setpoint: ");
+            debug.print(_position);
+            debug.print("\tSteps: ");
+            debug.print((double)steps);
+            debug.print("\t| _PWM: ");
             debug.print((byte)_PWM);
-            //Serial.print(_PWM);
-            debug.print(F("\tRPM setpoint: "));
-            debug.print((byte)_PID_setpoint);
-            //Serial.print(_PID_setpoint);
-            debug.print(F("\tRPM: "));
-            debug.println((byte)_PID_input);
-            //Serial.println((byte)_PID_input);
-
-            serial_timeout = millis() + 1000;
+            debug.print("\t| RPM setpoint: ");
+            debug.print(_PID_setpoint);
+            debug.print("\tRPM: ");
+            debug.println(_PID_input);
+            
+            serial_timeout = millis() + serial_timelapse;
         }
 
         if(_position_direction < 0){    // Backward
-            analogWrite(_pin1, _PWM);
-            analogWrite(_pin2, 0);
+            pwm.handlePWM(_pin1, _PWM);
+            digitalWrite(_pin2, LOW);
         }else{                          // Forward
-            analogWrite(_pin1, 0);
-            analogWrite(_pin2, _PWM);
+            digitalWrite(_pin1, LOW);
+            pwm.handlePWM(_pin2, _PWM);
         }
 
     }

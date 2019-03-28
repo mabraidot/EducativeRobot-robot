@@ -7,8 +7,10 @@
 #include "encoder.h"
 #include "light.h"
 #include "motor.h"
+#include "pwm.h"
 
 
+PWM pwm;
 Buzzer buzzer;
 Compiler compiler;
 RF rf;
@@ -23,6 +25,7 @@ void help(){
   debug.println(F("H: This help"));
   debug.println(F("M<cm_left>,<cm_right>,<speed>: Move Motors"));
   debug.println(F("L<red>,<yellow>,<blue>: Turn on LEDs"));
+  debug.println(F("K<kp>,<ki>,<kd>: Sets PID gains"));
 }
 
 
@@ -51,6 +54,21 @@ void process_serial(){
                     light.led(LIGHT_BLUE, blue);
                 }
                 break;
+            case 'K': 
+                {
+                    double kp = (double) Serial.parseFloat();
+                    double ki = (double) Serial.parseFloat();
+                    double kd = (double) Serial.parseFloat();
+                    leftMotor.speedPID->SetTunings(kp,ki,kd);
+                    rightMotor.speedPID->SetTunings(kp,ki,kd);
+                    Serial.print(F("Setting PID tunning: "));
+                    Serial.print(kp);
+                    Serial.print(F(", "));
+                    Serial.print(ki);
+                    Serial.print(F(", "));
+                    Serial.println(kd);
+                }
+                break;
             
         }
         while (Serial.read() != 10); // dump extra characters till LF is seen (you can use CRLF or just LF)
@@ -73,6 +91,12 @@ void setup(){
         Serial.begin(9600);
     }
 
+    int pins[MOTOR_PWM_PINS_QTY];
+    pins[0] = MOTOR_LEFT_INPUT_1;
+    pins[1] = MOTOR_LEFT_INPUT_2;
+    pins[2] = MOTOR_RIGHT_INPUT_1;
+    pins[3] = MOTOR_RIGHT_INPUT_2;
+    pwm.setPins(pins);
     rf.init();
     
     leftMotor.init(MOTOR_LEFT_ENCODER, MOTOR_LEFT_INPUT_1, MOTOR_LEFT_INPUT_2);

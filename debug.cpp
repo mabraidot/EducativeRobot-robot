@@ -26,6 +26,18 @@ void Debug::println(byte message){
     }
 }
 
+void Debug::print(double message){
+    if(DEBUG){
+        Serial.print(message);
+    }
+}
+
+void Debug::println(double message){
+    if(DEBUG){
+        Serial.println(message);
+    }
+}
+
 void Debug::print(char *message){
     if(DEBUG){
         Serial.print(message);
