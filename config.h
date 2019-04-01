@@ -16,6 +16,15 @@
 #define SENSOR_ULTRASONIC_TRIGGER   A2
 #define SENSOR_ULTRASONIC_ECHO      A3
 
+// SLAVE MODES
+#define MODE_FUNCTION               1
+#define MODE_MODIFIER_LOOP          2
+#define MODE_SLAVE_FORWARD_ARROW    3
+#define MODE_SLAVE_BACKWARD_ARROW   4
+#define MODE_SLAVE_LEFT_ARROW       5
+#define MODE_SLAVE_RIGHT_ARROW      6
+#define MODE_SLAVE_LIGHT            7
+#define MODE_SLAVE_SOUND            8
 
 // ENCODER
 #define WHEEL_GEAR_RATIO            5
