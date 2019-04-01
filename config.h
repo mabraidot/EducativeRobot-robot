@@ -26,11 +26,16 @@
 #define MODE_SLAVE_LIGHT            7
 #define MODE_SLAVE_SOUND            8
 
-// ENCODER
-#define WHEEL_GEAR_RATIO            5
-#define ENCODER_HOLES               30 * WHEEL_GEAR_RATIO
+// ROBOT DIMENTIONS
+#define WHEEL_GEAR_RATIO            5       // Motor gearbox reduction
 #define WHEEL_CIRCUMFERENCE         25      // Wheel circumference in cm
+#define ROBOT_CIRCUMFERENCE         37      // Wheel to wheel distance in cm
+#define ROBOT_SPEED                 4       // RPM
+
+// ENCODER
+#define ENCODER_HOLES               30 * WHEEL_GEAR_RATIO
 #define ENCODER_STEPS_X_CM          ENCODER_HOLES / WHEEL_CIRCUMFERENCE
+#define ENCODER_CM_TO_ROTATE_90     ROBOT_CIRCUMFERENCE / 4 
 #define ENCODER_ISR_QUERY_INTERVAL  50      // microseconds
 #define ENCODER_RPM_QUERY_INTERVAL  200000  // microseconds
 
