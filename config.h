@@ -30,7 +30,8 @@
 #define WHEEL_GEAR_RATIO            5       // Motor gearbox reduction
 #define WHEEL_CIRCUMFERENCE         25      // Wheel circumference in cm
 #define ROBOT_CIRCUMFERENCE         37      // Wheel to wheel distance in cm
-#define ROBOT_SPEED                 4       // RPM
+#define ROBOT_SPEED                 9       // RPM
+#define DIDACTIC_MAP_BLOCK_SIZE     20      // Size of the map grid where robot moves on in cm
 
 // ENCODER
 #define ENCODER_HOLES               30 * WHEEL_GEAR_RATIO
@@ -55,14 +56,6 @@
 #define RF_CLIENT_ADDRESS           1
 #define RF_SERVER_ADDRESS           2
 #define RF_WAIT_TIMEOUT             7000    // milliseconds
-
-// SLAVE MODES
-#define MODE_MODIFIER_LOOP          1
-#define MODE_SLAVE_FORWARD_ARROW    2
-#define MODE_SLAVE_LEFT_ARROW       2
-#define MODE_SLAVE_RIGHT_ARROW      3
-#define MODE_FUNCTION               4
-
 
 // GENERAL
 #define DEBUG                       true

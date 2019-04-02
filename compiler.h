@@ -1,3 +1,6 @@
+#include "motor.h"
+#include "light.h"
+
 #ifndef COMPILER_H
 #define COMPILER_H
 
@@ -14,10 +17,14 @@ class Compiler {
         void moveBackward(void);
         void moveTurnLeft(void);
         void moveTurnRight(void);
-        void light(byte color, byte mode);
+        void headLights(byte color, byte mode);
         void sound(byte sound_track);
         void waitLight(void);
         void waitSound(void);
+        Motor *leftMotor;
+        Motor *rightMotor;
+        
+        Light *light;
     
     private:
     

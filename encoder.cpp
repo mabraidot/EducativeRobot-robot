@@ -38,7 +38,6 @@ void Encoder::timerInterrupt(void){
     
     // DEBOUNCING
     // http://www.embedded.com/electronics-blogs/break-points/4024981/My-favorite-software-debouncers
-    static volatile uint16_t _state = 0;
     _state = (_state << 1) | !digitalRead(_pin) | 0xe000;
     if(_state == 0xf000){
         _RPM_counter++;

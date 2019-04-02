@@ -2,28 +2,31 @@
 #include "config.h"
 #include "debug.h"
 #include "buzzer.h"
-#include "compiler.h"
 #include "rf.h"
-#include "encoder.h"
-#include "light.h"
-#include "motor.h"
+//#include "encoder.h"
+//#include "light.h"
+//#include "motor.h"
 #include "pwm.h"
+#include "compiler.h"
 
 
 PWM pwm;
 Buzzer buzzer;
 Compiler compiler;
 RF rf;
-Light light;
-Motor leftMotor = Motor();
-Motor rightMotor = Motor();
+//Light light;
+//Motor leftMotor = Motor();
+//Motor rightMotor = Motor();
+//Motor leftMotor;
+//Motor rightMotor;
+
 
 void help(){
   debug.println(F("\nCONSOLE INTERFACE"));
   debug.println(F("Available commands:"));
   debug.println(F(""));
   debug.println(F("H: This help"));
-  debug.println(F("M<cm_left>,<cm_right>,<speed>: Move Motors"));
+  debug.println(F("M<dir>: Move Motors. 1: Forward. 2: Backward. 3: Left. 4: Right"));
   debug.println(F("L<red>,<yellow>,<blue>: Turn on LEDs"));
   debug.println(F("K<kp>,<ki>,<kd>: Sets PID gains"));
 }
@@ -37,11 +40,20 @@ void process_serial(){
             case 'H': help(); break;
             case 'M': 
                 {
-                    int cml = (int) Serial.parseInt();
-                    int cmr = (int) Serial.parseInt();
-                    byte speed = (byte) Serial.parseInt();
-                    leftMotor.move(cml, speed);
-                    rightMotor.move(cmr, speed);
+                    int subcmd = Serial.parseInt();
+                    if(subcmd == 1){
+                        Serial.println(F("Moving forward"));
+                        compiler.moveForward();
+                    }else if(subcmd == 2){
+                        Serial.println(F("Moving backward"));
+                        compiler.moveBackward();
+                    }else if(subcmd == 3){
+                        Serial.println(F("Moving left"));
+                        compiler.moveTurnLeft();
+                    }else if(subcmd == 4){
+                        Serial.println(F("Moving right"));
+                        compiler.moveTurnRight();
+                    }
                 }
                 break;
             case 'L': 
@@ -49,9 +61,9 @@ void process_serial(){
                     bool red = Serial.parseInt();
                     bool yellow = Serial.parseInt();
                     bool blue = Serial.parseInt();
-                    light.led(LIGHT_RED, red);
-                    light.led(LIGHT_YELLOW, yellow);
-                    light.led(LIGHT_BLUE, blue);
+                    compiler.headLights(LIGHT_RED, red);
+                    compiler.headLights(LIGHT_YELLOW, yellow);
+                    compiler.headLights(LIGHT_BLUE, blue);
                 }
                 break;
             case 'K': 
@@ -59,8 +71,8 @@ void process_serial(){
                     double kp = (double) Serial.parseFloat();
                     double ki = (double) Serial.parseFloat();
                     double kd = (double) Serial.parseFloat();
-                    leftMotor.speedPID->SetTunings(kp,ki,kd);
-                    rightMotor.speedPID->SetTunings(kp,ki,kd);
+                    compiler.leftMotor->speedPID->SetTunings(kp,ki,kd);
+                    compiler.rightMotor->speedPID->SetTunings(kp,ki,kd);
                     Serial.print(F("Setting PID tunning: "));
                     Serial.print(kp);
                     Serial.print(F(", "));
@@ -79,8 +91,8 @@ void process_serial(){
 void timerISR(void){
     Timer1.detachInterrupt();
 
-    leftMotor.encoder->timerInterrupt();
-    rightMotor.encoder->timerInterrupt();
+    compiler.leftMotor->encoder->timerInterrupt();
+    compiler.rightMotor->encoder->timerInterrupt();
     
     Timer1.attachInterrupt( timerISR );
 }
@@ -98,16 +110,15 @@ void setup(){
     pins[3] = MOTOR_RIGHT_INPUT_2;
     pwm.setPins(pins);
     rf.init();
-    
-    leftMotor.init(MOTOR_LEFT_ENCODER, MOTOR_LEFT_INPUT_1, MOTOR_LEFT_INPUT_2);
-    rightMotor.init(MOTOR_RIGHT_ENCODER, MOTOR_RIGHT_INPUT_1, MOTOR_RIGHT_INPUT_2);
+    compiler.init();
+
+    //leftMotor.init(MOTOR_LEFT_ENCODER, MOTOR_LEFT_INPUT_1, MOTOR_LEFT_INPUT_2);
+    //rightMotor.init(MOTOR_RIGHT_ENCODER, MOTOR_RIGHT_INPUT_1, MOTOR_RIGHT_INPUT_2);
 
     Timer1.initialize(ENCODER_ISR_QUERY_INTERVAL);
     Timer1.attachInterrupt( timerISR );
 
-    compiler.init();
-
-    light.init();
+    //light.init();
     
     buzzer.init();
     buzzer.startUp();
@@ -121,6 +132,6 @@ void loop(){
     compiler.run();
 
     //leftMotor.run();
-    rightMotor.run();
+    //rightMotor.run();
 
 }

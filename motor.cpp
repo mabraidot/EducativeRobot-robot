@@ -4,15 +4,12 @@
 #include "motor.h"
 #include "pwm.h"
 
-Motor::Motor(void){
-
-    speedPID = new PID(&_PID_input, &_PID_output, &_PID_setpoint,1,1,0, DIRECT);
-    encoder = new Encoder();
-
-}
 
 
 void Motor::init(int encoder_pin, int input1, int input2){
+
+    speedPID = new PID(&_PID_input, &_PID_output, &_PID_setpoint,1,1,0, DIRECT);
+    encoder = new Encoder();
 
     _pin1 = input1;
     _pin2 = input2;
@@ -32,7 +29,8 @@ void Motor::init(int encoder_pin, int input1, int input2){
 
 
 bool Motor::finished(void){
-    if(abs(_position - encoder->getSteps()) <= _position_accuracy){
+    //if(abs(_position - encoder->getSteps()) <= _position_accuracy){
+    if(abs(_position) - encoder->getSteps() <= 0){
         return true;
     }else{
         return false;
@@ -46,12 +44,10 @@ void Motor::move(int new_position, byte rpm){
 
     if(_position != new_position){
         stop();
-        encoder->clear();
         _PID_setpoint = (double) rpm * WHEEL_GEAR_RATIO;
         _position = abs(new_position);
         _position_direction = new_position/abs(new_position);
     }
-
 }
 
 
@@ -67,8 +63,8 @@ void Motor::stop(void){
     _position = 0;
     _position_direction = 1;
 
-    analogWrite(_pin1, 0);
-    analogWrite(_pin2, 0);
+    analogWrite(_pin1, LOW);
+    analogWrite(_pin2, LOW);
 
 }
 

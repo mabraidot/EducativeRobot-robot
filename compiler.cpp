@@ -3,9 +3,7 @@
 #include "debug.h"
 #include "compiler.h"
 #include "rf.h"
-#include "light.h"
-#include "motor.h"
-#include "buzzer.h"
+
 
 
 /*--------------------------------------*/
@@ -15,6 +13,15 @@ void Compiler::init(void){
     pinMode(LIGHT_YELLOW, OUTPUT);
     pinMode(LIGHT_RED, OUTPUT);
     pinMode(LIGHT_BLUE, OUTPUT);
+
+    leftMotor = new Motor();
+    rightMotor = new Motor();
+    light = new Light();
+
+    light->init();
+
+    leftMotor->init(MOTOR_LEFT_ENCODER, MOTOR_LEFT_INPUT_1, MOTOR_LEFT_INPUT_2);
+    rightMotor->init(MOTOR_RIGHT_ENCODER, MOTOR_RIGHT_INPUT_1, MOTOR_RIGHT_INPUT_2);
 }
 
 
@@ -36,6 +43,14 @@ void Compiler::run(void){
             if(!rf.sendMessage("ACK", true)){
                 debug.println("RF send ACK response failed");
             }
+
+            switch(_action){
+                case MODE_SLAVE_FORWARD_ARROW:  moveForward(false);     break;
+                case MODE_SLAVE_BACKWARD_ARROW: moveBackward();         break;
+                case MODE_SLAVE_LEFT_ARROW:     moveTurnLeft();         break;
+                case MODE_SLAVE_RIGHT_ARROW:    moveTurnRight();        break;
+                default: break;
+            }
         }
     }
 
@@ -52,30 +67,29 @@ void Compiler::run(void){
         }
     }*/
 
+    // TEST /////////////
+    leftMotor->run();
+    rightMotor->run();
+    /////////////////////
+
     switch(_action){
         case MODE_SLAVE_FORWARD_ARROW: 
-            {
-                moveForward(false);
-            }
-            break;
         case MODE_SLAVE_BACKWARD_ARROW: 
-            {
-                moveBackward(false);
-            }
-            break;
         case MODE_SLAVE_LEFT_ARROW: 
-            {
-                moveTurnLeft(false);
-            }
-            break;
         case MODE_SLAVE_RIGHT_ARROW: 
             {
-                moveTurnRight(false);
+                if(!leftMotor->finished() && !rightMotor->finished()){
+                    leftMotor->run();
+                    rightMotor->run();
+                }else{
+                    _action = 0;
+                }
             }
             break;
 
         default: break;
     }
+    
 
 }
 
@@ -83,9 +97,9 @@ void Compiler::run(void){
 void Compiler::moveForward(bool until_wall_detected = false){
     
     if(!until_wall_detected){
-        int block_dimention = 20;
-        leftMotor.move(block_dimention, ROBOT_SPEED);
-        rightMotor.move(block_dimention, ROBOT_SPEED);
+        int block_dimention = DIDACTIC_MAP_BLOCK_SIZE;
+        leftMotor->move(block_dimention, ROBOT_SPEED);
+        rightMotor->move(block_dimention, ROBOT_SPEED);
     }else{
         // @TODO: implement ultrasonic sensor to do unlimited run 
         // until an obstacle is detected
@@ -96,36 +110,36 @@ void Compiler::moveForward(bool until_wall_detected = false){
 
 void Compiler::moveBackward(void){
     
-    int block_dimention = -20;
-    leftMotor.move(block_dimention, ROBOT_SPEED);
-    rightMotor.move(block_dimention, ROBOT_SPEED);
+    int block_dimention = -DIDACTIC_MAP_BLOCK_SIZE;
+    leftMotor->move(block_dimention, ROBOT_SPEED);
+    rightMotor->move(block_dimention, ROBOT_SPEED);
 
 }
 
 
 void Compiler::moveTurnLeft(void){
 
-    leftMotor.move(-1 * ENCODER_CM_TO_ROTATE_90, ROBOT_SPEED);
-    rightMotor.move(ENCODER_CM_TO_ROTATE_90, ROBOT_SPEED);
+    leftMotor->move(-1 * ENCODER_CM_TO_ROTATE_90, ROBOT_SPEED);
+    rightMotor->move(ENCODER_CM_TO_ROTATE_90, ROBOT_SPEED);
 
 }
 
 
 void Compiler::moveTurnRight(void){
 
-    leftMotor.move(ENCODER_CM_TO_ROTATE_90, ROBOT_SPEED);
-    rightMotor.move(-1 * ENCODER_CM_TO_ROTATE_90, ROBOT_SPEED);
+    leftMotor->move(ENCODER_CM_TO_ROTATE_90, ROBOT_SPEED);
+    rightMotor->move(-1 * ENCODER_CM_TO_ROTATE_90, ROBOT_SPEED);
 
 }
 
 
-void Compiler::light(byte color, byte mode){
+void Compiler::headLights(byte color, byte mode){
 
-    light.led(color, mode);
+    light->led(color, mode);
     
 }
 
 
-void Compiler::sound(byte sound_track);
-void Compiler::waitLight(void);
-void Compiler::waitSound(void);
+//void Compiler::sound(byte sound_track);
+//void Compiler::waitLight(void);
+//void Compiler::waitSound(void);
