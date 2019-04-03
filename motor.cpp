@@ -2,7 +2,6 @@
 #include "config.h"
 #include "debug.h"
 #include "motor.h"
-#include "pwm.h"
 
 
 
@@ -18,7 +17,7 @@ void Motor::init(int encoder_pin, int input1, int input2){
     analogWrite(input1, 0);
     analogWrite(input2, 0);
 
-    speedPID->SetSampleTime(50);
+    speedPID->SetSampleTime(ENCODER_RPM_QUERY_INTERVAL / 8000);
     speedPID->SetOutputLimits(0,255);
     speedPID->SetMode(MANUAL);
     speedPID->SetTunings(MOTOR_PID_kP, MOTOR_PID_kI, MOTOR_PID_kD);
@@ -29,7 +28,6 @@ void Motor::init(int encoder_pin, int input1, int input2){
 
 
 bool Motor::finished(void){
-    //if(abs(_position - encoder->getSteps()) <= _position_accuracy){
     if(abs(_position) - encoder->getSteps() <= 0){
         return true;
     }else{
@@ -69,6 +67,16 @@ void Motor::stop(void){
 }
 
 
+void Motor::run(byte rpm){
+    if(rpm > 0){
+        _PID_setpoint = (double) rpm;
+    }else{
+        _PID_setpoint = (double) ROBOT_SPEED * WHEEL_GEAR_RATIO;
+    }
+    run();
+}
+
+
 void Motor::run(void){
 
     if(finished() || _position <= 0){
@@ -77,16 +85,17 @@ void Motor::run(void){
 
         unsigned long steps = encoder->getSteps();
         _PID_input = (double) encoder->getRPM();
-            
+        
         speedPID->SetMode(AUTOMATIC);
         speedPID->Compute();
         _PWM = (int) abs(_PID_output);
-
+        
         
         if(DEBUG){
-            static int serial_timelapse = 1000;
+            static int serial_timelapse = 200;
             static unsigned long serial_timeout = millis() + serial_timelapse;
             if(serial_timeout < millis()){
+                
                 debug.print("Steps setpoint: ");
                 debug.print(_position);
                 debug.print("\t| Steps: ");
@@ -103,11 +112,11 @@ void Motor::run(void){
         }
 
         if(_position_direction < 0){    // Backward
-            pwm.handlePWM(_pin1, _PWM);
-            digitalWrite(_pin2, LOW);
+            analogWrite(_pin1, _PWM);
+            analogWrite(_pin2, 0);
         }else{                          // Forward
-            digitalWrite(_pin1, LOW);
-            pwm.handlePWM(_pin2, _PWM);
+            analogWrite(_pin1, 0);
+            analogWrite(_pin2, _PWM);
         }
 
     }

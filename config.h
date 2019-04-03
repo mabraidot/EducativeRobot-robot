@@ -30,7 +30,7 @@
 #define WHEEL_GEAR_RATIO            5       // Motor gearbox reduction
 #define WHEEL_CIRCUMFERENCE         25      // Wheel circumference in cm
 #define ROBOT_CIRCUMFERENCE         37      // Wheel to wheel distance in cm
-#define ROBOT_SPEED                 9       // RPM
+#define ROBOT_SPEED                 3       // RPM
 #define DIDACTIC_MAP_BLOCK_SIZE     20      // Size of the map grid where robot moves on in cm
 
 // ENCODER
@@ -38,14 +38,12 @@
 #define ENCODER_STEPS_X_CM          ENCODER_HOLES / WHEEL_CIRCUMFERENCE
 #define ENCODER_CM_TO_ROTATE_90     ROBOT_CIRCUMFERENCE / 4 
 #define ENCODER_ISR_QUERY_INTERVAL  50      // microseconds
-#define ENCODER_RPM_QUERY_INTERVAL  200000  // microseconds
+#define ENCODER_RPM_QUERY_INTERVAL  50000  // microseconds
 
 // MOTOR
-#define MOTOR_PID_kP                0.80
-#define MOTOR_PID_kI                14.00
+#define MOTOR_PID_kP                3.00
+#define MOTOR_PID_kI                30.00
 #define MOTOR_PID_kD                0.00
-#define MOTOR_PWM_PINS_QTY          4
-#define MOTOR_PWM_FREQUENCY         1       // microseconds. 1/(2*freq)
 
 // LIGHT
 #define STATE_LED_OFF               0

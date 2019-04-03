@@ -8,11 +8,11 @@ class Motor {
 
     public:
 
-        //Motor(void);
         Motor(){};
         
         void init(int encoder_pin, int input1, int input2);
         void run(void);
+        void run(byte rpm);
         void stop(void);
         void move(int new_position, byte rpm);
         bool finished(void);
@@ -27,7 +27,6 @@ class Motor {
         double _PID_setpoint = 0;
         double _PID_input = 0;
         double _PID_output = 0;
-        uint8_t _position_accuracy = 2;   // Set to the highest tolerable inaccuracy (units are encoder counts)
         int _PWM = 0;
         double _position = 0;
         int _position_direction = 0;

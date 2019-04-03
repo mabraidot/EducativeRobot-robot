@@ -70,6 +70,7 @@ void Compiler::run(void){
     // TEST /////////////
     leftMotor->run();
     rightMotor->run();
+    //rightMotor->run(leftMotor->encoder->getRPM());
     /////////////////////
 
     switch(_action){

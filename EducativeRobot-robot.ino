@@ -3,22 +3,12 @@
 #include "debug.h"
 #include "buzzer.h"
 #include "rf.h"
-//#include "encoder.h"
-//#include "light.h"
-//#include "motor.h"
-#include "pwm.h"
 #include "compiler.h"
 
 
-PWM pwm;
 Buzzer buzzer;
 Compiler compiler;
 RF rf;
-//Light light;
-//Motor leftMotor = Motor();
-//Motor rightMotor = Motor();
-//Motor leftMotor;
-//Motor rightMotor;
 
 
 void help(){
@@ -26,7 +16,7 @@ void help(){
   debug.println(F("Available commands:"));
   debug.println(F(""));
   debug.println(F("H: This help"));
-  debug.println(F("M<dir>: Move Motors. 1: Forward. 2: Backward. 3: Left. 4: Right"));
+  debug.println(F("M<dir>,<speed>: Move Motors. 1: Forward. 2: Backward. 3: Left. 4: Right"));
   debug.println(F("L<red>,<yellow>,<blue>: Turn on LEDs"));
   debug.println(F("K<kp>,<ki>,<kd>: Sets PID gains"));
 }
@@ -41,12 +31,17 @@ void process_serial(){
             case 'M': 
                 {
                     int subcmd = Serial.parseInt();
+                    //int speed = Serial.parseInt();
                     if(subcmd == 1){
                         Serial.println(F("Moving forward"));
                         compiler.moveForward();
+                        //compiler.leftMotor->move(DIDACTIC_MAP_BLOCK_SIZE, speed);
+                        //compiler.rightMotor->move(DIDACTIC_MAP_BLOCK_SIZE, speed);
                     }else if(subcmd == 2){
                         Serial.println(F("Moving backward"));
-                        compiler.moveBackward();
+                        //compiler.moveBackward();
+                        compiler.leftMotor->move(-DIDACTIC_MAP_BLOCK_SIZE, speed);
+                        compiler.rightMotor->move(-DIDACTIC_MAP_BLOCK_SIZE, speed);
                     }else if(subcmd == 3){
                         Serial.println(F("Moving left"));
                         compiler.moveTurnLeft();
@@ -100,26 +95,15 @@ void timerISR(void){
 
 void setup(){
     if(DEBUG){
-        Serial.begin(9600);
+        Serial.begin(115200);
     }
 
-    int pins[MOTOR_PWM_PINS_QTY];
-    pins[0] = MOTOR_LEFT_INPUT_1;
-    pins[1] = MOTOR_LEFT_INPUT_2;
-    pins[2] = MOTOR_RIGHT_INPUT_1;
-    pins[3] = MOTOR_RIGHT_INPUT_2;
-    pwm.setPins(pins);
     rf.init();
     compiler.init();
-
-    //leftMotor.init(MOTOR_LEFT_ENCODER, MOTOR_LEFT_INPUT_1, MOTOR_LEFT_INPUT_2);
-    //rightMotor.init(MOTOR_RIGHT_ENCODER, MOTOR_RIGHT_INPUT_1, MOTOR_RIGHT_INPUT_2);
 
     Timer1.initialize(ENCODER_ISR_QUERY_INTERVAL);
     Timer1.attachInterrupt( timerISR );
 
-    //light.init();
-    
     buzzer.init();
     buzzer.startUp();
 
@@ -130,8 +114,5 @@ void loop(){
     if (Serial.available()) process_serial();
 
     compiler.run();
-
-    //leftMotor.run();
-    //rightMotor.run();
 
 }
