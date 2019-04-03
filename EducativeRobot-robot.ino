@@ -31,7 +31,7 @@ void process_serial(){
             case 'M': 
                 {
                     int subcmd = Serial.parseInt();
-                    //int speed = Serial.parseInt();
+                    //double speed = Serial.parseFloat();
                     if(subcmd == 1){
                         Serial.println(F("Moving forward"));
                         compiler.moveForward();
@@ -39,15 +39,19 @@ void process_serial(){
                         //compiler.rightMotor->move(DIDACTIC_MAP_BLOCK_SIZE, speed);
                     }else if(subcmd == 2){
                         Serial.println(F("Moving backward"));
-                        //compiler.moveBackward();
-                        compiler.leftMotor->move(-DIDACTIC_MAP_BLOCK_SIZE, speed);
-                        compiler.rightMotor->move(-DIDACTIC_MAP_BLOCK_SIZE, speed);
+                        compiler.moveBackward();
+                        //compiler.leftMotor->move(-DIDACTIC_MAP_BLOCK_SIZE, speed);
+                        //compiler.rightMotor->move(-DIDACTIC_MAP_BLOCK_SIZE, speed);
                     }else if(subcmd == 3){
                         Serial.println(F("Moving left"));
                         compiler.moveTurnLeft();
+                        //compiler.leftMotor->move(-speed, ROBOT_SPEED);
+                        //compiler.rightMotor->move(speed, ROBOT_SPEED);
                     }else if(subcmd == 4){
                         Serial.println(F("Moving right"));
                         compiler.moveTurnRight();
+                        //compiler.leftMotor->move(speed, ROBOT_SPEED);
+                        //compiler.rightMotor->move(-speed, ROBOT_SPEED);
                     }
                 }
                 break;
@@ -67,7 +71,7 @@ void process_serial(){
                     double ki = (double) Serial.parseFloat();
                     double kd = (double) Serial.parseFloat();
                     compiler.leftMotor->speedPID->SetTunings(kp,ki,kd);
-                    compiler.rightMotor->speedPID->SetTunings(kp,ki,kd);
+                    //compiler.rightMotor->speedPID->SetTunings(kp,ki,kd);
                     Serial.print(F("Setting PID tunning: "));
                     Serial.print(kp);
                     Serial.print(F(", "));

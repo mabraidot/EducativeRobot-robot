@@ -20,7 +20,6 @@ void Motor::init(int encoder_pin, int input1, int input2){
     speedPID->SetSampleTime(ENCODER_RPM_QUERY_INTERVAL / 8000);
     speedPID->SetOutputLimits(0,255);
     speedPID->SetMode(MANUAL);
-    speedPID->SetTunings(MOTOR_PID_kP, MOTOR_PID_kI, MOTOR_PID_kD);
 
     encoder->init(encoder_pin);
 
@@ -36,9 +35,9 @@ bool Motor::finished(void){
 }
 
 
-void Motor::move(int new_position, byte rpm){
+void Motor::move(double new_position, byte rpm){
     
-    new_position = (double) new_position * ENCODER_STEPS_X_CM;
+    new_position = (double) new_position * (double) ENCODER_STEPS_X_CM;
 
     if(_position != new_position){
         stop();
@@ -64,16 +63,6 @@ void Motor::stop(void){
     analogWrite(_pin1, LOW);
     analogWrite(_pin2, LOW);
 
-}
-
-
-void Motor::run(byte rpm){
-    if(rpm > 0){
-        _PID_setpoint = (double) rpm;
-    }else{
-        _PID_setpoint = (double) ROBOT_SPEED * WHEEL_GEAR_RATIO;
-    }
-    run();
 }
 
 

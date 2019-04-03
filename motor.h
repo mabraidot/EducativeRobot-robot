@@ -12,9 +12,8 @@ class Motor {
         
         void init(int encoder_pin, int input1, int input2);
         void run(void);
-        void run(byte rpm);
         void stop(void);
-        void move(int new_position, byte rpm);
+        void move(double new_position, byte rpm);
         bool finished(void);
         void setSpeed(float rpm);
         Encoder *encoder;
