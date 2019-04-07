@@ -29,8 +29,9 @@
 // ROBOT DIMENTIONS
 #define WHEEL_GEAR_RATIO            5       // Motor gearbox reduction
 #define WHEEL_CIRCUMFERENCE         26.8    // Wheel circumference in cm
-#define ROBOT_CIRCUMFERENCE         29.2    // Wheel to wheel distance in cm
-#define ROBOT_SPEED                 3       // RPM
+#define ROBOT_CIRCUMFERENCE         28.2    // Wheel to wheel distance in cm
+#define ROBOT_SPEED                 10       // RPM
+#define ROBOT_TURN_SPEED            7        // RPM
 #define DIDACTIC_MAP_BLOCK_SIZE     20      // Size of the map grid where robot moves on in cm
 
 // ENCODER
@@ -41,13 +42,13 @@
 #define ENCODER_RPM_QUERY_INTERVAL  50000  // microseconds
 
 // MOTOR
-#define MOTOR_LEFT_PID_kP          0.80
-#define MOTOR_LEFT_PID_kI          27.00
+#define MOTOR_LEFT_PID_kP          0.50
+#define MOTOR_LEFT_PID_kI          13.00
 #define MOTOR_LEFT_PID_kD          0.20
 
-#define MOTOR_RIGHT_PID_kP          0.70
-#define MOTOR_RIGHT_PID_kI          50.00
-#define MOTOR_RIGHT_PID_kD          0.20
+#define MOTOR_RIGHT_PID_kP          2.60
+#define MOTOR_RIGHT_PID_kI          12.30
+#define MOTOR_RIGHT_PID_kD          20.00
 
 // LIGHT
 #define STATE_LED_OFF               0

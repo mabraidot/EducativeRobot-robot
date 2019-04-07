@@ -66,7 +66,7 @@ void Motor::stop(void){
 }
 
 
-void Motor::run(void){
+void Motor::run(){
 
     if(finished() || _position <= 0){
         stop();
@@ -74,14 +74,23 @@ void Motor::run(void){
 
         unsigned long steps = encoder->getSteps();
         _PID_input = (double) encoder->getRPM();
+        static int target_pwm = 0;
         
-        speedPID->SetMode(AUTOMATIC);
-        speedPID->Compute();
-        _PWM = (int) abs(_PID_output);
+        // Ramp down
+        if( steps > (_position*0.9) ){
+            double coef = map(steps, (_position*0.9), _position, 100, 50);
+            speedPID->SetMode(MANUAL);
+            _PWM = max((target_pwm * (coef/100)), 180);
+        }else{
+            speedPID->SetMode(AUTOMATIC);
+            speedPID->Compute();
+            _PWM = (int) abs(_PID_output);
+            target_pwm = _PWM;
+        }
         
         
-        if(DEBUG){
-            static int serial_timelapse = 200;
+        /*if(DEBUG){
+            static int serial_timelapse = 10;
             static unsigned long serial_timeout = millis() + serial_timelapse;
             if(serial_timeout < millis()){
                 
@@ -96,9 +105,10 @@ void Motor::run(void){
                 debug.print("\t| RPM: ");
                 debug.println(_PID_input);
                 
+                
                 serial_timeout = millis() + serial_timelapse;
             }
-        }
+        }*/
 
         if(_position_direction < 0){    // Backward
             analogWrite(_pin1, _PWM);

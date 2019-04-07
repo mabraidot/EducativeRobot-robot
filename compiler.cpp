@@ -123,16 +123,16 @@ void Compiler::moveBackward(void){
 
 void Compiler::moveTurnLeft(void){
 
-    leftMotor->move(-ENCODER_CM_TO_ROTATE_90, ROBOT_SPEED);
-    rightMotor->move(ENCODER_CM_TO_ROTATE_90, ROBOT_SPEED);
+    leftMotor->move(-ENCODER_CM_TO_ROTATE_90, ROBOT_TURN_SPEED);
+    rightMotor->move(ENCODER_CM_TO_ROTATE_90, ROBOT_TURN_SPEED);
 
 }
 
 
 void Compiler::moveTurnRight(void){
 
-    leftMotor->move(ENCODER_CM_TO_ROTATE_90, ROBOT_SPEED);
-    rightMotor->move(-ENCODER_CM_TO_ROTATE_90, ROBOT_SPEED);
+    leftMotor->move(ENCODER_CM_TO_ROTATE_90, ROBOT_TURN_SPEED);
+    rightMotor->move(-ENCODER_CM_TO_ROTATE_90, ROBOT_TURN_SPEED);
 
 }
 

@@ -11,7 +11,7 @@ class Motor {
         Motor(){};
         
         void init(int encoder_pin, int input1, int input2);
-        void run(void);
+        void run();
         void stop(void);
         void move(double new_position, byte rpm);
         bool finished(void);

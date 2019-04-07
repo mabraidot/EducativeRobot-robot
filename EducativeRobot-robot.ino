@@ -32,26 +32,27 @@ void process_serial(){
                 {
                     int subcmd = Serial.parseInt();
                     //double speed = Serial.parseFloat();
+                    double speed = ROBOT_SPEED;
                     if(subcmd == 1){
                         Serial.println(F("Moving forward"));
-                        compiler.moveForward();
-                        //compiler.leftMotor->move(DIDACTIC_MAP_BLOCK_SIZE, speed);
-                        //compiler.rightMotor->move(DIDACTIC_MAP_BLOCK_SIZE, speed);
+                        //compiler.moveForward();
+                        compiler.leftMotor->move(DIDACTIC_MAP_BLOCK_SIZE, speed);
+                        compiler.rightMotor->move(DIDACTIC_MAP_BLOCK_SIZE, speed);
                     }else if(subcmd == 2){
                         Serial.println(F("Moving backward"));
-                        compiler.moveBackward();
-                        //compiler.leftMotor->move(-DIDACTIC_MAP_BLOCK_SIZE, speed);
-                        //compiler.rightMotor->move(-DIDACTIC_MAP_BLOCK_SIZE, speed);
+                        //compiler.moveBackward();
+                        compiler.leftMotor->move(-DIDACTIC_MAP_BLOCK_SIZE, speed);
+                        compiler.rightMotor->move(-DIDACTIC_MAP_BLOCK_SIZE, speed);
                     }else if(subcmd == 3){
                         Serial.println(F("Moving left"));
-                        compiler.moveTurnLeft();
-                        //compiler.leftMotor->move(-speed, ROBOT_SPEED);
-                        //compiler.rightMotor->move(speed, ROBOT_SPEED);
+                        //compiler.moveTurnLeft();
+                        compiler.leftMotor->move(-ENCODER_CM_TO_ROTATE_90, 8);
+                        compiler.rightMotor->move(ENCODER_CM_TO_ROTATE_90, 8);
                     }else if(subcmd == 4){
                         Serial.println(F("Moving right"));
-                        compiler.moveTurnRight();
-                        //compiler.leftMotor->move(speed, ROBOT_SPEED);
-                        //compiler.rightMotor->move(-speed, ROBOT_SPEED);
+                        //compiler.moveTurnRight();
+                        compiler.leftMotor->move(ENCODER_CM_TO_ROTATE_90, 8);
+                        compiler.rightMotor->move(-ENCODER_CM_TO_ROTATE_90, 8);
                     }
                 }
                 break;
@@ -67,17 +68,30 @@ void process_serial(){
                 break;
             case 'K': 
                 {
-                    double kp = (double) Serial.parseFloat();
-                    double ki = (double) Serial.parseFloat();
-                    double kd = (double) Serial.parseFloat();
-                    compiler.leftMotor->speedPID->SetTunings(kp,ki,kd);
-                    //compiler.rightMotor->speedPID->SetTunings(kp,ki,kd);
-                    Serial.print(F("Setting PID tunning: "));
-                    Serial.print(kp);
-                    Serial.print(F(", "));
-                    Serial.print(ki);
-                    Serial.print(F(", "));
-                    Serial.println(kd);
+                    int subk = Serial.parseInt();
+                    if(subk == 1){
+                        double kp = (double) Serial.parseFloat();
+                        double ki = (double) Serial.parseFloat();
+                        double kd = (double) Serial.parseFloat();
+                        compiler.leftMotor->speedPID->SetTunings(kp,ki,kd);
+                        Serial.print(F("Setting LEFT PID tunning: "));
+                        Serial.print(kp);
+                        Serial.print(F(", "));
+                        Serial.print(ki);
+                        Serial.print(F(", "));
+                        Serial.println(kd);
+                    }else if(subk == 2){
+                        double kp = (double) Serial.parseFloat();
+                        double ki = (double) Serial.parseFloat();
+                        double kd = (double) Serial.parseFloat();
+                        compiler.rightMotor->speedPID->SetTunings(kp,ki,kd);
+                        Serial.print(F("Setting RIGHT PID tunning: "));
+                        Serial.print(kp);
+                        Serial.print(F(", "));
+                        Serial.print(ki);
+                        Serial.print(F(", "));
+                        Serial.println(kd);
+                    }
                 }
                 break;
             
