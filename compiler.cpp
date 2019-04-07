@@ -71,9 +71,8 @@ void Compiler::run(void){
     }*/
 
     // TEST /////////////
-    leftMotor->run();
-    rightMotor->run();
-    //rightMotor->run(leftMotor->encoder->getRPM());
+    //leftMotor->run();
+    //rightMotor->run();
     /////////////////////
 
     switch(_action){
@@ -82,10 +81,16 @@ void Compiler::run(void){
         case MODE_SLAVE_LEFT_ARROW: 
         case MODE_SLAVE_RIGHT_ARROW: 
             {
-                if(!leftMotor->finished() && !rightMotor->finished()){
+                if(!leftMotor->finished() || !rightMotor->finished()){
                     leftMotor->run();
                     rightMotor->run();
                 }else{
+                    leftMotor->stop();
+                    rightMotor->stop();
+                    // Send finishing code
+                    if(!rf.sendMessage("END", true)){
+                        debug.println("RF send of finishing code failed");
+                    }
                     _action = 0;
                 }
             }
