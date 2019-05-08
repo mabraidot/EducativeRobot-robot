@@ -2,8 +2,8 @@
 #define BUZZER                      2
 #define RF_CE                       7
 #define RF_CSN                      8
-#define LIGHT_YELLOW                0
 #define LIGHT_RED                   1
+#define LIGHT_GREEN                 0
 #define LIGHT_BLUE                  A4
 #define MOTOR_LEFT_ENCODER          3
 #define MOTOR_LEFT_INPUT_1          5   

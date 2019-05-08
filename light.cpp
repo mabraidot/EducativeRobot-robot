@@ -7,7 +7,7 @@
 void Light::init(void){
 
     pinMode(LIGHT_RED, OUTPUT);
-    pinMode(LIGHT_YELLOW, OUTPUT);
+    pinMode(LIGHT_GREEN, OUTPUT);
     pinMode(LIGHT_BLUE, OUTPUT);
 
 }

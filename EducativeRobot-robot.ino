@@ -62,7 +62,7 @@ void process_serial(){
                     bool yellow = Serial.parseInt();
                     bool blue = Serial.parseInt();
                     compiler.headLights(LIGHT_RED, red);
-                    compiler.headLights(LIGHT_YELLOW, yellow);
+                    compiler.headLights(LIGHT_GREEN, yellow);
                     compiler.headLights(LIGHT_BLUE, blue);
                 }
                 break;
