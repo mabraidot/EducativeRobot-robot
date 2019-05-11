@@ -1,5 +1,6 @@
-#include <PID_v1.h>
+#include <ServoTimer2.h>
 #include "encoder.h"
+
 
 #ifndef MOTOR_H
 #define MOTOR_H
@@ -10,22 +11,19 @@ class Motor {
 
         Motor(){};
         
-        void init(int encoder_pin, int input1, int input2);
+        void init(int encoder_pin, int motor_pin, bool inverse);
         void run();
         void stop(void);
-        void move(double new_position, byte rpm);
+        void move(double new_position);
         bool finished(void);
         void setSpeed(float rpm);
         Encoder *encoder;
-        PID *speedPID;
+        ServoTimer2 *servo;
     
     private:
 
-        int _pin1;
-        int _pin2;
-        double _PID_setpoint = 0;
-        double _PID_input = 0;
-        double _PID_output = 0;
+        int _pin;
+        int _inverse = 0;
         int _PWM = 0;
         double _position = 0;
         int _position_direction = 0;

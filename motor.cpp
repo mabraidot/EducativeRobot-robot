@@ -4,23 +4,19 @@
 #include "motor.h"
 
 
+void Motor::init(int encoder_pin, int motor_pin, bool inverse){
 
-void Motor::init(int encoder_pin, int input1, int input2){
-
-    speedPID = new PID(&_PID_input, &_PID_output, &_PID_setpoint,1,1,0, DIRECT);
+    //speedPID = new PID(&_PID_input, &_PID_output, &_PID_setpoint,1,1,0, DIRECT);
     encoder = new Encoder();
+    servo = new ServoTimer2();
 
-    _pin1 = input1;
-    _pin2 = input2;
-    pinMode(input1, OUTPUT);
-    pinMode(input2, OUTPUT);
-    analogWrite(input1, 0);
-    analogWrite(input2, 0);
-
-    speedPID->SetSampleTime(ENCODER_RPM_QUERY_INTERVAL / 8000);
-    speedPID->SetOutputLimits(0,255);
+    _inverse = (inverse) ? -1 : 1;
+    _pin = motor_pin;
+    
+    /*speedPID->SetSampleTime(ENCODER_RPM_QUERY_INTERVAL / 1000);
+    speedPID->SetOutputLimits(SERVO_MIN_SPEED, SERVO_MAX_SPEED);
     speedPID->SetMode(MANUAL);
-
+    */
     encoder->init(encoder_pin);
 
 }
@@ -35,34 +31,27 @@ bool Motor::finished(void){
 }
 
 
-void Motor::move(double new_position, byte rpm){
+void Motor::move(double new_position){
     
     new_position = (double) new_position * (double) ENCODER_STEPS_X_CM;
 
     if(_position != new_position){
         stop();
-        _PID_setpoint = (double) rpm * WHEEL_GEAR_RATIO;
         _position = abs(new_position);
         _position_direction = new_position/abs(new_position);
+        servo->attach(_pin);
     }
 }
 
 
 void Motor::stop(void){
 
-    speedPID->SetMode(MANUAL);
     encoder->clear();
 
-    _PID_input = 0;
-    _PID_output = 0;
     _PWM = 0;
-    _PID_setpoint = 0;
     _position = 0;
     _position_direction = 1;
-
-    analogWrite(_pin1, LOW);
-    analogWrite(_pin2, LOW);
-
+    servo->detach();
 }
 
 
@@ -73,51 +62,28 @@ void Motor::run(){
     }else{
 
         unsigned long steps = encoder->getSteps();
-        _PID_input = (double) encoder->getRPM();
-        static int target_pwm = 0;
+        //_PID_input = (double) encoder->getRPM();
         
-        // Ramp down
-        if( steps > (_position*0.9) ){
-            double coef = map(steps, (_position*0.9), _position, 100, 50);
-            speedPID->SetMode(MANUAL);
-            _PWM = max((target_pwm * (coef/100)), 180);
-        }else{
-            speedPID->SetMode(AUTOMATIC);
-            speedPID->Compute();
-            _PWM = (int) abs(_PID_output);
-            target_pwm = _PWM;
-        }
-        
-        
-        /*if(DEBUG){
-            static int serial_timelapse = 10;
+        _PWM = SERVO_ZERO_SPEED + (SERVO_MAX_SPEED * _position_direction * _inverse);
+        servo->write(_PWM);
+
+        if(DEBUG && _inverse < 0){
+            static int serial_timelapse = 100;
             static unsigned long serial_timeout = millis() + serial_timelapse;
             if(serial_timeout < millis()){
                 
-                debug.print("Steps setpoint: ");
+                serial_timeout = millis() + serial_timelapse;
+
+                debug.print("\t| Steps setpoint: ");
                 debug.print(_position);
                 debug.print("\t| Steps: ");
                 debug.print((double)steps);
                 debug.print("\t| _PWM: ");
-                debug.print((byte)_PWM);
-                debug.print("\t| RPM setpoint: ");
-                debug.print(_PID_setpoint);
-                debug.print("\t| RPM: ");
-                debug.println(_PID_input);
-                
-                
-                serial_timeout = millis() + serial_timelapse;
+                debug.print((double)_PWM);
+                debug.println("");
             }
-        }*/
-
-        if(_position_direction < 0){    // Backward
-            analogWrite(_pin1, _PWM);
-            analogWrite(_pin2, 0);
-        }else{                          // Forward
-            analogWrite(_pin1, 0);
-            analogWrite(_pin2, _PWM);
+            
         }
-
     }
 
 }

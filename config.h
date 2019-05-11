@@ -6,11 +6,9 @@
 #define LIGHT_GREEN                 0
 #define LIGHT_BLUE                  A4
 #define MOTOR_LEFT_ENCODER          3
-#define MOTOR_LEFT_INPUT_1          5   
-#define MOTOR_LEFT_INPUT_2          6
+#define MOTOR_LEFT_INPUT            5   
 #define MOTOR_RIGHT_ENCODER         4
-#define MOTOR_RIGHT_INPUT_1         9
-#define MOTOR_RIGHT_INPUT_2         10
+#define MOTOR_RIGHT_INPUT           10
 #define SENSOR_LIGHT                A0
 #define SENSOR_SOUND                A1
 #define SENSOR_ULTRASONIC_TRIGGER   A2
@@ -27,28 +25,21 @@
 #define MODE_SLAVE_SOUND            8
 
 // ROBOT DIMENTIONS
-#define WHEEL_GEAR_RATIO            5       // Motor gearbox reduction
-#define WHEEL_CIRCUMFERENCE         26.8    // Wheel circumference in cm
-#define ROBOT_CIRCUMFERENCE         28.2    // Wheel to wheel distance in cm
-#define ROBOT_SPEED                 10       // RPM
-#define ROBOT_TURN_SPEED            7        // RPM
+#define WHEEL_CIRCUMFERENCE         59      // (26.9cm)+ Wheel circumference in cm. Radius times pi
+#define ROBOT_CIRCUMFERENCE         11      // (48.7) Wheel to wheel diameter in cm times pi
 #define DIDACTIC_MAP_BLOCK_SIZE     20      // Size of the map grid where robot moves on in cm
 
 // ENCODER
-#define ENCODER_HOLES               30 * WHEEL_GEAR_RATIO
+#define ENCODER_HOLES               30 //13
 #define ENCODER_STEPS_X_CM          ENCODER_HOLES / WHEEL_CIRCUMFERENCE
 #define ENCODER_CM_TO_ROTATE_90     ROBOT_CIRCUMFERENCE / 4 
 #define ENCODER_ISR_QUERY_INTERVAL  50      // microseconds
-#define ENCODER_RPM_QUERY_INTERVAL  50000  // microseconds
+#define ENCODER_RPM_QUERY_INTERVAL  200000  // microseconds
 
 // MOTOR
-#define MOTOR_LEFT_PID_kP          0.50
-#define MOTOR_LEFT_PID_kI          13.00
-#define MOTOR_LEFT_PID_kD          0.20
+#define SERVO_ZERO_SPEED            1500
+#define SERVO_MAX_SPEED             500
 
-#define MOTOR_RIGHT_PID_kP          2.60
-#define MOTOR_RIGHT_PID_kI          12.30
-#define MOTOR_RIGHT_PID_kD          20.00
 
 // LIGHT
 #define STATE_LED_OFF               0
@@ -62,4 +53,4 @@
 
 // GENERAL
 #define DEBUG                       true
-#define SILENT                      false
+#define SILENT                      true

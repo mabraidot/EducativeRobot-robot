@@ -5,7 +5,6 @@
 #include "rf.h"
 #include "compiler.h"
 
-
 Buzzer buzzer;
 Compiler compiler;
 RF rf;
@@ -16,9 +15,8 @@ void help(){
   debug.println(F("Available commands:"));
   debug.println(F(""));
   debug.println(F("H: This help"));
-  debug.println(F("M<dir>,<speed>: Move Motors. 1: Forward. 2: Backward. 3: Left. 4: Right"));
+  debug.println(F("M<dir>: Move Motors. 1: Forward. 2: Backward. 3: Left. 4: Right"));
   debug.println(F("L<red>,<yellow>,<blue>: Turn on LEDs"));
-  debug.println(F("K<kp>,<ki>,<kd>: Sets PID gains"));
 }
 
 
@@ -31,28 +29,22 @@ void process_serial(){
             case 'M': 
                 {
                     int subcmd = Serial.parseInt();
-                    //double speed = Serial.parseFloat();
-                    double speed = ROBOT_SPEED;
                     if(subcmd == 1){
                         Serial.println(F("Moving forward"));
-                        //compiler.moveForward();
-                        compiler.leftMotor->move(DIDACTIC_MAP_BLOCK_SIZE, speed);
-                        compiler.rightMotor->move(DIDACTIC_MAP_BLOCK_SIZE, speed);
+                        compiler.leftMotor->move(DIDACTIC_MAP_BLOCK_SIZE);
+                        compiler.rightMotor->move(DIDACTIC_MAP_BLOCK_SIZE);
                     }else if(subcmd == 2){
                         Serial.println(F("Moving backward"));
-                        //compiler.moveBackward();
-                        compiler.leftMotor->move(-DIDACTIC_MAP_BLOCK_SIZE, speed);
-                        compiler.rightMotor->move(-DIDACTIC_MAP_BLOCK_SIZE, speed);
+                        compiler.leftMotor->move(-DIDACTIC_MAP_BLOCK_SIZE);
+                        compiler.rightMotor->move(-DIDACTIC_MAP_BLOCK_SIZE);
                     }else if(subcmd == 3){
                         Serial.println(F("Moving left"));
-                        //compiler.moveTurnLeft();
-                        compiler.leftMotor->move(-ENCODER_CM_TO_ROTATE_90, 8);
-                        compiler.rightMotor->move(ENCODER_CM_TO_ROTATE_90, 8);
+                        compiler.leftMotor->move(-ENCODER_CM_TO_ROTATE_90);
+                        compiler.rightMotor->move(ENCODER_CM_TO_ROTATE_90);
                     }else if(subcmd == 4){
                         Serial.println(F("Moving right"));
-                        //compiler.moveTurnRight();
-                        compiler.leftMotor->move(ENCODER_CM_TO_ROTATE_90, 8);
-                        compiler.rightMotor->move(-ENCODER_CM_TO_ROTATE_90, 8);
+                        compiler.leftMotor->move(ENCODER_CM_TO_ROTATE_90);
+                        compiler.rightMotor->move(-ENCODER_CM_TO_ROTATE_90);
                     }
                 }
                 break;
@@ -64,34 +56,6 @@ void process_serial(){
                     compiler.headLights(LIGHT_RED, red);
                     compiler.headLights(LIGHT_GREEN, yellow);
                     compiler.headLights(LIGHT_BLUE, blue);
-                }
-                break;
-            case 'K': 
-                {
-                    int subk = Serial.parseInt();
-                    if(subk == 1){
-                        double kp = (double) Serial.parseFloat();
-                        double ki = (double) Serial.parseFloat();
-                        double kd = (double) Serial.parseFloat();
-                        compiler.leftMotor->speedPID->SetTunings(kp,ki,kd);
-                        Serial.print(F("Setting LEFT PID tunning: "));
-                        Serial.print(kp);
-                        Serial.print(F(", "));
-                        Serial.print(ki);
-                        Serial.print(F(", "));
-                        Serial.println(kd);
-                    }else if(subk == 2){
-                        double kp = (double) Serial.parseFloat();
-                        double ki = (double) Serial.parseFloat();
-                        double kd = (double) Serial.parseFloat();
-                        compiler.rightMotor->speedPID->SetTunings(kp,ki,kd);
-                        Serial.print(F("Setting RIGHT PID tunning: "));
-                        Serial.print(kp);
-                        Serial.print(F(", "));
-                        Serial.print(ki);
-                        Serial.print(F(", "));
-                        Serial.println(kd);
-                    }
                 }
                 break;
             
@@ -118,7 +82,7 @@ void setup(){
 
     rf.init();
     compiler.init();
-
+    
     Timer1.initialize(ENCODER_ISR_QUERY_INTERVAL);
     Timer1.attachInterrupt( timerISR );
 
@@ -133,4 +97,8 @@ void loop(){
 
     compiler.run();
 
+    /// TEST ////////////////
+    compiler.rightMotor->run();
+    compiler.leftMotor->run();
+    
 }

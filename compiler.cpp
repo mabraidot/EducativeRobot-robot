@@ -20,17 +20,12 @@ void Compiler::init(void){
 
     light->init();
 
-    leftMotor->init(MOTOR_LEFT_ENCODER, MOTOR_LEFT_INPUT_1, MOTOR_LEFT_INPUT_2);
-    rightMotor->init(MOTOR_RIGHT_ENCODER, MOTOR_RIGHT_INPUT_1, MOTOR_RIGHT_INPUT_2);
-    leftMotor->speedPID->SetTunings(MOTOR_LEFT_PID_kP, MOTOR_LEFT_PID_kI, MOTOR_LEFT_PID_kD);
-    rightMotor->speedPID->SetTunings(MOTOR_RIGHT_PID_kP, MOTOR_RIGHT_PID_kI, MOTOR_RIGHT_PID_kD);
+    leftMotor->init(MOTOR_LEFT_ENCODER, MOTOR_LEFT_INPUT, false);
+    rightMotor->init(MOTOR_RIGHT_ENCODER, MOTOR_RIGHT_INPUT, true);
 
 }
 
 
-// Test RF
-//static int action_interval = 4000;
-//static unsigned long action_timeout = millis() + action_interval;
 void Compiler::run(void){
 
     // No instruction received
@@ -41,8 +36,7 @@ void Compiler::run(void){
             _action = rf.getNumberFromMessage(0, 2);
             debug.print("Action: ");
             debug.println(_action);
-            //action_timeout = millis() + action_interval;
-
+            
             if(!rf.sendMessage("ACK", true)){
                 debug.println("RF send ACK response failed");
             }
@@ -57,24 +51,6 @@ void Compiler::run(void){
         }
     }
 
-    // Instruction was received
-    /*if(_action > 0){
-        if(action_timeout < millis()){
-            action_timeout = millis() + action_interval;
-            
-            // Send finishing code
-            if(!rf.sendMessage("END", true)){
-                debug.println("RF send of finishing code failed");
-            }
-            _action = 0;
-        }
-    }*/
-
-    // TEST /////////////
-    //leftMotor->run();
-    //rightMotor->run();
-    /////////////////////
-
     switch(_action){
         case MODE_SLAVE_FORWARD_ARROW: 
         case MODE_SLAVE_BACKWARD_ARROW: 
@@ -82,8 +58,8 @@ void Compiler::run(void){
         case MODE_SLAVE_RIGHT_ARROW: 
             {
                 if(!leftMotor->finished() || !rightMotor->finished()){
-                    leftMotor->run();
                     rightMotor->run();
+                    leftMotor->run();
                 }else{
                     leftMotor->stop();
                     rightMotor->stop();
@@ -107,8 +83,8 @@ void Compiler::moveForward(bool until_wall_detected = false){
     
     if(!until_wall_detected){
         int block_dimention = DIDACTIC_MAP_BLOCK_SIZE;
-        leftMotor->move(block_dimention, ROBOT_SPEED);
-        rightMotor->move(block_dimention, ROBOT_SPEED);
+        rightMotor->move(block_dimention);
+        leftMotor->move(block_dimention);
     }else{
         // @TODO: implement ultrasonic sensor to do unlimited run 
         // until an obstacle is detected
@@ -120,25 +96,25 @@ void Compiler::moveForward(bool until_wall_detected = false){
 void Compiler::moveBackward(void){
     
     int block_dimention = -DIDACTIC_MAP_BLOCK_SIZE;
-    leftMotor->move(block_dimention, ROBOT_SPEED);
-    rightMotor->move(block_dimention, ROBOT_SPEED);
-
+    rightMotor->move(block_dimention);
+    leftMotor->move(block_dimention);
+    
 }
 
 
 void Compiler::moveTurnLeft(void){
 
-    leftMotor->move(-ENCODER_CM_TO_ROTATE_90, ROBOT_TURN_SPEED);
-    rightMotor->move(ENCODER_CM_TO_ROTATE_90, ROBOT_TURN_SPEED);
-
+    rightMotor->move(ENCODER_CM_TO_ROTATE_90);
+    leftMotor->move(-ENCODER_CM_TO_ROTATE_90);
+    
 }
 
 
 void Compiler::moveTurnRight(void){
 
-    leftMotor->move(ENCODER_CM_TO_ROTATE_90, ROBOT_TURN_SPEED);
-    rightMotor->move(-ENCODER_CM_TO_ROTATE_90, ROBOT_TURN_SPEED);
-
+    rightMotor->move(-ENCODER_CM_TO_ROTATE_90);
+    leftMotor->move(ENCODER_CM_TO_ROTATE_90);
+    
 }
 
 
