@@ -26,7 +26,7 @@
 
 // ROBOT DIMENTIONS
 #define WHEEL_CIRCUMFERENCE         59      // (26.9cm)+ Wheel circumference in cm. Radius times pi
-#define ROBOT_CIRCUMFERENCE         11      // (48.7) Wheel to wheel diameter in cm times pi
+#define ROBOT_CIRCUMFERENCE         10.5      // (48.7) Wheel to wheel diameter in cm times pi
 #define DIDACTIC_MAP_BLOCK_SIZE     20      // Size of the map grid where robot moves on in cm
 
 // ENCODER
@@ -37,9 +37,10 @@
 #define ENCODER_RPM_QUERY_INTERVAL  200000  // microseconds
 
 // MOTOR
-#define SERVO_ZERO_SPEED            1500
-#define SERVO_MAX_SPEED             500
-
+#define SERVO_LEFT_FORWARD_SPEED    117
+#define SERVO_LEFT_BACKWARD_SPEED   49
+#define SERVO_RIGHT_FORWARD_SPEED   42
+#define SERVO_RIGHT_BACKWARD_SPEED  110
 
 // LIGHT
 #define STATE_LED_OFF               0

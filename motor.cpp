@@ -4,19 +4,18 @@
 #include "motor.h"
 
 
-void Motor::init(int encoder_pin, int motor_pin, bool inverse){
+void Motor::init(int encoder_pin, int motor_pin, int forward_speed, int backward_speed){
 
-    //speedPID = new PID(&_PID_input, &_PID_output, &_PID_setpoint,1,1,0, DIRECT);
     encoder = new Encoder();
-    servo = new ServoTimer2();
-
-    _inverse = (inverse) ? -1 : 1;
-    _pin = motor_pin;
     
-    /*speedPID->SetSampleTime(ENCODER_RPM_QUERY_INTERVAL / 1000);
-    speedPID->SetOutputLimits(SERVO_MIN_SPEED, SERVO_MAX_SPEED);
-    speedPID->SetMode(MANUAL);
-    */
+    servo = new SoftwareServo();
+    servo->setMinimumPulse(1200);
+    servo->setMaximumPulse(1800);
+
+    _pin = motor_pin;
+    _forward_speed = forward_speed;
+    _backward_speed = backward_speed;
+    
     encoder->init(encoder_pin);
 
 }
@@ -62,19 +61,23 @@ void Motor::run(){
     }else{
 
         unsigned long steps = encoder->getSteps();
-        //_PID_input = (double) encoder->getRPM();
         
-        _PWM = SERVO_ZERO_SPEED + (SERVO_MAX_SPEED * _position_direction * _inverse);
+        if(_position_direction > 0){
+            _PWM = _forward_speed;
+        }else{
+            _PWM = _backward_speed;
+        }
         servo->write(_PWM);
+        servo->refresh();
 
-        if(DEBUG && _inverse < 0){
-            static int serial_timelapse = 100;
+        if(DEBUG){
+            static int serial_timelapse = 20;
             static unsigned long serial_timeout = millis() + serial_timelapse;
             if(serial_timeout < millis()){
                 
                 serial_timeout = millis() + serial_timelapse;
 
-                debug.print("\t| Steps setpoint: ");
+                debug.print("\t| Steps target: ");
                 debug.print(_position);
                 debug.print("\t| Steps: ");
                 debug.print((double)steps);

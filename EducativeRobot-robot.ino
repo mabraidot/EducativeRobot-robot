@@ -28,6 +28,13 @@ void process_serial(){
             case 'H': help(); break;
             case 'M': 
                 {
+                    /*int lspeed = Serial.parseInt();
+                    int rspeed = Serial.parseInt();
+                    compiler.leftMotor->servo->attach(MOTOR_LEFT_INPUT);
+                    compiler.rightMotor->servo->attach(MOTOR_RIGHT_INPUT);
+                    compiler.leftMotor->servo->write(lspeed);
+                    compiler.rightMotor->servo->write(rspeed);
+                    */
                     int subcmd = Serial.parseInt();
                     if(subcmd == 1){
                         Serial.println(F("Moving forward"));
@@ -91,14 +98,24 @@ void setup(){
 
 }
 
-
 void loop(){
     if (Serial.available()) process_serial();
 
     compiler.run();
 
     /// TEST ////////////////
-    compiler.rightMotor->run();
-    compiler.leftMotor->run();
-    
+    //compiler.leftMotor->run();
+    //compiler.rightMotor->run();
+    /*if(compiler.leftMotor->servo->read() > 0 || compiler.rightMotor->servo->read() > 0){
+        
+        static unsigned long ttt = millis() + 2000;
+        if(millis() >= ttt){
+            compiler.leftMotor->servo->detach();
+            compiler.rightMotor->servo->detach();
+            ttt = millis() + 2000;
+        }
+    }
+    compiler.leftMotor->servo->refresh();
+    compiler.rightMotor->servo->refresh();
+    */
 }

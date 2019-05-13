@@ -1,4 +1,4 @@
-#include <ServoTimer2.h>
+#include <SoftwareServo.h>
 #include "encoder.h"
 
 
@@ -11,23 +11,23 @@ class Motor {
 
         Motor(){};
         
-        void init(int encoder_pin, int motor_pin, bool inverse);
+        void init(int encoder_pin, int motor_pin, int forward_speed, int backward_speed);
         void run();
         void stop(void);
         void move(double new_position);
         bool finished(void);
         void setSpeed(float rpm);
         Encoder *encoder;
-        ServoTimer2 *servo;
+        SoftwareServo *servo;
     
     private:
 
         int _pin;
-        int _inverse = 0;
         int _PWM = 0;
         double _position = 0;
         int _position_direction = 0;
-        
+        int _forward_speed = 0;
+        int _backward_speed = 0;
 };
 
 //extern Motor motor;
