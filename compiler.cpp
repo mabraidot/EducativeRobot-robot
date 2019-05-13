@@ -37,7 +37,7 @@ void Compiler::run(void){
             debug.print("Action: ");
             debug.println(_action);
             
-            if(!rf.sendMessage("ACK", true)){
+            if(!rf.sendMessage("ACK", false)){
                 debug.println("RF send ACK response failed");
             }
 
@@ -64,7 +64,7 @@ void Compiler::run(void){
                     leftMotor->stop();
                     rightMotor->stop();
                     // Send finishing code
-                    if(!rf.sendMessage("END", true)){
+                    if(!rf.sendMessage("END", false)){
                         debug.println("RF send of finishing code failed");
                     }
                     _action = 0;

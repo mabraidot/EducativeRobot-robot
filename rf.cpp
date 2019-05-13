@@ -30,7 +30,7 @@ boolean RF::sendMessage(uint8_t *message, bool ack){
     debug.println((char *)text);
     sent = false;
     if (manager.sendtoWait((uint8_t *)text, sizeof(text), RF_SERVER_ADDRESS)){
-        if(!ack){
+        if(ack){
             if(receiveMessageTimeout(2000)){
                 debug.print(F("RF ACK Response: "));
                 debug.println((char *)_buffer);
