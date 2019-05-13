@@ -54,4 +54,4 @@
 
 // GENERAL
 #define DEBUG                       true
-#define SILENT                      true
+#define SILENT                      false

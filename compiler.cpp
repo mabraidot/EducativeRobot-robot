@@ -63,6 +63,7 @@ void Compiler::run(void){
                 }else{
                     leftMotor->stop();
                     rightMotor->stop();
+                    delay(400); // Little pause between actions
                     // Send finishing code
                     if(!rf.sendMessage("END", false)){
                         debug.println("RF send of finishing code failed");
