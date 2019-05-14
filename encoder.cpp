@@ -30,11 +30,17 @@ void Encoder::clear(void){
 void Encoder::timerInterrupt(void){
     
     _micros += ENCODER_ISR_QUERY_INTERVAL;
+    if(_RPM_counter >= 5){
+        _RPM = (float) (_RPM_counter * 60 * 1000 * 1000) / (ENCODER_HOLES * _micros);
+        _RPM_counter = 0;
+        _micros = 0;
+    }
+    /*_micros += ENCODER_ISR_QUERY_INTERVAL;
     if(_micros > ENCODER_RPM_QUERY_INTERVAL){
         _RPM = (float) (_RPM_counter * 60 * 1000 * 1000) / (ENCODER_HOLES * ENCODER_RPM_QUERY_INTERVAL);
         _RPM_counter = 0;
         _micros = 0;
-    }
+    }*/
     
     // DEBOUNCING
     // http://www.embedded.com/electronics-blogs/break-points/4024981/My-favorite-software-debouncers
@@ -43,5 +49,14 @@ void Encoder::timerInterrupt(void){
         _RPM_counter++;
         _steps++;
     }
+    // NO DEBOUNCING
+    /*if(digitalRead(_pin) != _state){
+        _state = digitalRead(_pin);
+        if(!_state){
+            _RPM_counter++;
+            _steps++;
+        }
+    }*/
+
 
 }
