@@ -35,6 +35,7 @@
 #define ENCODER_CM_TO_ROTATE_90     ROBOT_CIRCUMFERENCE / 4 
 #define ENCODER_ISR_QUERY_INTERVAL  1000    //50      // microseconds
 #define ENCODER_RPM_QUERY_INTERVAL  200000  // microseconds
+#define TICKS_RPM_COUNTER           10      // Encoder holes to count before rpm calculations
 
 // MOTOR
 #define SERVO_LEFT_FORWARD_SPEED    117
