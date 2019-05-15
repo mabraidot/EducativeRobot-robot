@@ -46,12 +46,18 @@ void process_serial(){
                         compiler.rightMotor->move(-DIDACTIC_MAP_BLOCK_SIZE);
                     }else if(subcmd == 3){
                         Serial.println(F("Moving left"));
-                        compiler.leftMotor->move(-ENCODER_CM_TO_ROTATE_90);
-                        compiler.rightMotor->move(ENCODER_CM_TO_ROTATE_90);
+                        compiler.leftMotor->move(-CM_TO_ROTATE_90);
+                        compiler.rightMotor->move(CM_TO_ROTATE_90);
+                        //float cm = Serial.parseFloat();
+                        //compiler.leftMotor->move(-cm);
+                        //compiler.rightMotor->move(cm);
                     }else if(subcmd == 4){
                         Serial.println(F("Moving right"));
-                        compiler.leftMotor->move(ENCODER_CM_TO_ROTATE_90);
-                        compiler.rightMotor->move(-ENCODER_CM_TO_ROTATE_90);
+                        compiler.leftMotor->move(CM_TO_ROTATE_90);
+                        compiler.rightMotor->move(-CM_TO_ROTATE_90);
+                        //float cm = Serial.parseFloat();
+                        //compiler.leftMotor->move(cm);
+                        //compiler.rightMotor->move(-cm);
                     }
                 }
                 break;
@@ -104,8 +110,8 @@ void loop(){
     compiler.run();
 
     /// TEST ////////////////
-    //compiler.leftMotor->run();
-    //compiler.rightMotor->run();
+    compiler.leftMotor->run();
+    compiler.rightMotor->run();
     /*if(compiler.leftMotor->servo->read() > 0 || compiler.rightMotor->servo->read() > 0){
         
         static unsigned long ttt = millis() + 2000;

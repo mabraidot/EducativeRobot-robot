@@ -24,6 +24,7 @@ unsigned long Encoder::getSteps(void){
 void Encoder::clear(void){
     _RPM_counter = 0;
     _steps = 0;
+    _micros = 0;
 }
 
 
@@ -56,9 +57,9 @@ void Encoder::timerInterrupt(void){
     if(digitalRead(_pin) != _state){
         _state = digitalRead(_pin);
         _RPM_counter++;
-        if(!_state){
+        //if(_state == LOW){
             _steps++;
-        }
+        //}
     }
 
 

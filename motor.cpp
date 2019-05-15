@@ -39,6 +39,7 @@ void Motor::move(double new_position){
         _position = abs(new_position);
         _position_direction = new_position/abs(new_position);
         servo->attach(_pin);
+        encoder->clear();
     }
 }
 
@@ -71,19 +72,23 @@ void Motor::run(){
         servo->refresh();
 
         if(DEBUG){
-            static int serial_timelapse = 20;
+            static int serial_timelapse = 50;
             static unsigned long serial_timeout = millis() + serial_timelapse;
             if(serial_timeout < millis()){
                 
                 serial_timeout = millis() + serial_timelapse;
 
+                debug.print((_forward_speed > _backward_speed) ? "LEFT " : "RIGHT ");
                 debug.print("\t| Steps target: ");
                 debug.print(_position);
                 debug.print("\t| Steps: ");
-                debug.print((double)steps);
+                debug.print((double)encoder->getSteps());
+                debug.print("\t| RPM: ");
+                debug.print((double)encoder->getRPM());
                 debug.print("\t| _PWM: ");
                 debug.print((double)_PWM);
                 debug.println("");
+                
             }
             
         }

@@ -25,23 +25,25 @@
 #define MODE_SLAVE_SOUND            8
 
 // ROBOT DIMENTIONS
-#define WHEEL_CIRCUMFERENCE         59      // (26.9cm)+ Wheel circumference in cm. Radius times pi
-#define ROBOT_CIRCUMFERENCE         10.5      // (48.7) Wheel to wheel diameter in cm times pi
+#define WHEEL_CIRCUMFERENCE         27.5    // Wheel circumference in cm. Diameter times pi
 #define DIDACTIC_MAP_BLOCK_SIZE     20      // Size of the map grid where robot moves on in cm
+#define CM_TO_ROTATE_90             2 
 
 // ENCODER
-#define ENCODER_HOLES               30 //13
+#define ENCODER_HOLES               30
 #define ENCODER_STEPS_X_CM          ENCODER_HOLES / WHEEL_CIRCUMFERENCE
-#define ENCODER_CM_TO_ROTATE_90     ROBOT_CIRCUMFERENCE / 4 
-#define ENCODER_ISR_QUERY_INTERVAL  1000    //50      // microseconds
-#define ENCODER_RPM_QUERY_INTERVAL  200000  // microseconds
-#define TICKS_RPM_COUNTER           10      // Encoder holes to count before rpm calculations
+#define ENCODER_ISR_QUERY_INTERVAL  50      // microseconds
+#define TICKS_RPM_COUNTER           5      // Encoder holes to count before rpm calculations
 
 // MOTOR
-#define SERVO_LEFT_FORWARD_SPEED    117
+/*#define SERVO_LEFT_FORWARD_SPEED    117
 #define SERVO_RIGHT_FORWARD_SPEED   42
 #define SERVO_LEFT_BACKWARD_SPEED   49
-#define SERVO_RIGHT_BACKWARD_SPEED  110
+#define SERVO_RIGHT_BACKWARD_SPEED  110*/
+#define SERVO_LEFT_FORWARD_SPEED    117
+#define SERVO_RIGHT_FORWARD_SPEED   0
+#define SERVO_LEFT_BACKWARD_SPEED   49
+#define SERVO_RIGHT_BACKWARD_SPEED  180
 
 // LIGHT
 #define STATE_LED_OFF               0

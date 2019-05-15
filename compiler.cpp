@@ -105,16 +105,16 @@ void Compiler::moveBackward(void){
 
 void Compiler::moveTurnLeft(void){
 
-    rightMotor->move(ENCODER_CM_TO_ROTATE_90);
-    leftMotor->move(-ENCODER_CM_TO_ROTATE_90);
+    rightMotor->move(CM_TO_ROTATE_90);
+    leftMotor->move(-CM_TO_ROTATE_90);
     
 }
 
 
 void Compiler::moveTurnRight(void){
 
-    rightMotor->move(-ENCODER_CM_TO_ROTATE_90);
-    leftMotor->move(ENCODER_CM_TO_ROTATE_90);
+    rightMotor->move(-CM_TO_ROTATE_90);
+    leftMotor->move(CM_TO_ROTATE_90);
     
 }
 
