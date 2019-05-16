@@ -20,8 +20,14 @@ void Compiler::init(void){
 
     light->init();
 
-    leftMotor->init(MOTOR_LEFT_ENCODER, MOTOR_LEFT_INPUT, SERVO_LEFT_FORWARD_SPEED, SERVO_LEFT_BACKWARD_SPEED);
-    rightMotor->init(MOTOR_RIGHT_ENCODER, MOTOR_RIGHT_INPUT, SERVO_RIGHT_FORWARD_SPEED, SERVO_RIGHT_BACKWARD_SPEED);
+    //leftMotor->init(MOTOR_LEFT_ENCODER, MOTOR_LEFT_INPUT, SERVO_LEFT_FORWARD_SPEED, SERVO_LEFT_BACKWARD_SPEED);
+    //rightMotor->init(MOTOR_RIGHT_ENCODER, MOTOR_RIGHT_INPUT, SERVO_RIGHT_FORWARD_SPEED, SERVO_RIGHT_BACKWARD_SPEED);
+    leftMotor->init(MOTOR_LEFT_ENCODER, MOTOR_LEFT_INPUT_1, MOTOR_LEFT_INPUT_2);
+    rightMotor->init(MOTOR_RIGHT_ENCODER, MOTOR_RIGHT_INPUT_1, MOTOR_RIGHT_INPUT_2);
+    leftMotor->speedPID->SetTunings(MOTOR_LEFT_PID_kP, MOTOR_LEFT_PID_kI, MOTOR_LEFT_PID_kD);
+    rightMotor->speedPID->SetTunings(MOTOR_RIGHT_PID_kP, MOTOR_RIGHT_PID_kI, MOTOR_RIGHT_PID_kD);
+    leftMotor->speedPID->SetOutputLimits(68,255);
+    rightMotor->speedPID->SetOutputLimits(177,255);
 
 }
 
@@ -84,8 +90,8 @@ void Compiler::moveForward(bool until_wall_detected = false){
     
     if(!until_wall_detected){
         int block_dimention = DIDACTIC_MAP_BLOCK_SIZE;
-        rightMotor->move(block_dimention);
-        leftMotor->move(block_dimention);
+        rightMotor->move(block_dimention, ROBOT_SPEED);
+        leftMotor->move(block_dimention, ROBOT_SPEED);
     }else{
         // @TODO: implement ultrasonic sensor to do unlimited run 
         // until an obstacle is detected
@@ -97,24 +103,24 @@ void Compiler::moveForward(bool until_wall_detected = false){
 void Compiler::moveBackward(void){
     
     int block_dimention = -DIDACTIC_MAP_BLOCK_SIZE;
-    rightMotor->move(block_dimention);
-    leftMotor->move(block_dimention);
+    rightMotor->move(block_dimention, ROBOT_SPEED);
+    leftMotor->move(block_dimention, ROBOT_SPEED);
     
 }
 
 
 void Compiler::moveTurnLeft(void){
 
-    rightMotor->move(CM_TO_ROTATE_90);
-    leftMotor->move(-CM_TO_ROTATE_90);
+    rightMotor->move(CM_TO_ROTATE_90, ROBOT_TURN_SPEED);
+    leftMotor->move(-CM_TO_ROTATE_90, ROBOT_TURN_SPEED);
     
 }
 
 
 void Compiler::moveTurnRight(void){
 
-    rightMotor->move(-CM_TO_ROTATE_90);
-    leftMotor->move(CM_TO_ROTATE_90);
+    rightMotor->move(-CM_TO_ROTATE_90, ROBOT_TURN_SPEED);
+    leftMotor->move(CM_TO_ROTATE_90, ROBOT_TURN_SPEED);
     
 }
 

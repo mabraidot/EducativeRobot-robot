@@ -17,6 +17,7 @@ void help(){
   debug.println(F("H: This help"));
   debug.println(F("M<dir>: Move Motors. 1: Forward. 2: Backward. 3: Left. 4: Right"));
   debug.println(F("L<red>,<yellow>,<blue>: Turn on LEDs"));
+  debug.println(F("K<kp>,<ki>,<kd>: Sets PID gains"));
 }
 
 
@@ -28,36 +29,36 @@ void process_serial(){
             case 'H': help(); break;
             case 'M': 
                 {
-                    /*int lspeed = Serial.parseInt();
-                    int rspeed = Serial.parseInt();
-                    compiler.leftMotor->servo->attach(MOTOR_LEFT_INPUT);
-                    compiler.rightMotor->servo->attach(MOTOR_RIGHT_INPUT);
-                    compiler.leftMotor->servo->write(lspeed);
-                    compiler.rightMotor->servo->write(rspeed);
-                    */
+                    
                     int subcmd = Serial.parseInt();
+                    
+                    //int lspeed = Serial.parseInt();
+                    //int rspeed = Serial.parseInt();
+                    
                     if(subcmd == 1){
                         Serial.println(F("Moving forward"));
-                        compiler.leftMotor->move(DIDACTIC_MAP_BLOCK_SIZE);
-                        compiler.rightMotor->move(DIDACTIC_MAP_BLOCK_SIZE);
+                        compiler.leftMotor->move(DIDACTIC_MAP_BLOCK_SIZE, ROBOT_SPEED);
+                        compiler.rightMotor->move(DIDACTIC_MAP_BLOCK_SIZE, ROBOT_SPEED);
+                        //compiler.leftMotor->move(DIDACTIC_MAP_BLOCK_SIZE, lspeed);
+                        //compiler.rightMotor->move(DIDACTIC_MAP_BLOCK_SIZE, rspeed);
                     }else if(subcmd == 2){
                         Serial.println(F("Moving backward"));
-                        compiler.leftMotor->move(-DIDACTIC_MAP_BLOCK_SIZE);
-                        compiler.rightMotor->move(-DIDACTIC_MAP_BLOCK_SIZE);
+                        compiler.leftMotor->move(-DIDACTIC_MAP_BLOCK_SIZE, ROBOT_SPEED);
+                        compiler.rightMotor->move(-DIDACTIC_MAP_BLOCK_SIZE, ROBOT_SPEED);
+                        //compiler.leftMotor->move(-DIDACTIC_MAP_BLOCK_SIZE, lspeed);
+                        //compiler.rightMotor->move(-DIDACTIC_MAP_BLOCK_SIZE, rspeed);
                     }else if(subcmd == 3){
                         Serial.println(F("Moving left"));
-                        compiler.leftMotor->move(-CM_TO_ROTATE_90);
-                        compiler.rightMotor->move(CM_TO_ROTATE_90);
-                        //float cm = Serial.parseFloat();
-                        //compiler.leftMotor->move(-cm);
-                        //compiler.rightMotor->move(cm);
+                        compiler.leftMotor->move(-CM_TO_ROTATE_90, ROBOT_TURN_SPEED);
+                        compiler.rightMotor->move(CM_TO_ROTATE_90, ROBOT_TURN_SPEED);
+                        //compiler.leftMotor->move(-CM_TO_ROTATE_90, lspeed);
+                        //compiler.rightMotor->move(CM_TO_ROTATE_90, rspeed);
                     }else if(subcmd == 4){
                         Serial.println(F("Moving right"));
-                        compiler.leftMotor->move(CM_TO_ROTATE_90);
-                        compiler.rightMotor->move(-CM_TO_ROTATE_90);
-                        //float cm = Serial.parseFloat();
-                        //compiler.leftMotor->move(cm);
-                        //compiler.rightMotor->move(-cm);
+                        compiler.leftMotor->move(CM_TO_ROTATE_90, ROBOT_TURN_SPEED);
+                        compiler.rightMotor->move(-CM_TO_ROTATE_90, ROBOT_TURN_SPEED);
+                        //compiler.leftMotor->move(CM_TO_ROTATE_90, lspeed);
+                        //compiler.rightMotor->move(-CM_TO_ROTATE_90, rspeed);
                     }
                 }
                 break;
@@ -69,6 +70,34 @@ void process_serial(){
                     compiler.headLights(LIGHT_RED, red);
                     compiler.headLights(LIGHT_GREEN, yellow);
                     compiler.headLights(LIGHT_BLUE, blue);
+                }
+                break;
+            case 'K': 
+                {
+                    int subk = Serial.parseInt();
+                    if(subk == 1){
+                        double kp = (double) Serial.parseFloat();
+                        double ki = (double) Serial.parseFloat();
+                        double kd = (double) Serial.parseFloat();
+                        compiler.leftMotor->speedPID->SetTunings(kp,ki,kd);
+                        Serial.print(F("Setting LEFT PID tunning: "));
+                        Serial.print(kp);
+                        Serial.print(F(", "));
+                        Serial.print(ki);
+                        Serial.print(F(", "));
+                        Serial.println(kd);
+                    }else if(subk == 2){
+                        double kp = (double) Serial.parseFloat();
+                        double ki = (double) Serial.parseFloat();
+                        double kd = (double) Serial.parseFloat();
+                        compiler.rightMotor->speedPID->SetTunings(kp,ki,kd);
+                        Serial.print(F("Setting RIGHT PID tunning: "));
+                        Serial.print(kp);
+                        Serial.print(F(", "));
+                        Serial.print(ki);
+                        Serial.print(F(", "));
+                        Serial.println(kd);
+                    }
                 }
                 break;
             

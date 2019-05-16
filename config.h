@@ -6,9 +6,13 @@
 #define LIGHT_GREEN                 0
 #define LIGHT_BLUE                  A4
 #define MOTOR_LEFT_ENCODER          3
-#define MOTOR_LEFT_INPUT            5   
+//#define MOTOR_LEFT_INPUT            5   
+#define MOTOR_LEFT_INPUT_1          5   
+#define MOTOR_LEFT_INPUT_2          6
 #define MOTOR_RIGHT_ENCODER         4
-#define MOTOR_RIGHT_INPUT           10
+//#define MOTOR_RIGHT_INPUT           10
+#define MOTOR_RIGHT_INPUT_1         9
+#define MOTOR_RIGHT_INPUT_2         10
 #define SENSOR_LIGHT                A0
 #define SENSOR_SOUND                A1
 #define SENSOR_ULTRASONIC_TRIGGER   A2
@@ -25,25 +29,35 @@
 #define MODE_SLAVE_SOUND            8
 
 // ROBOT DIMENTIONS
-#define WHEEL_CIRCUMFERENCE         27.5    // Wheel circumference in cm. Diameter times pi
+#define WHEEL_CIRCUMFERENCE         26.5    // Wheel circumference in cm. Diameter times pi
 #define DIDACTIC_MAP_BLOCK_SIZE     20      // Size of the map grid where robot moves on in cm
-#define CM_TO_ROTATE_90             2 
+#define CM_TO_ROTATE_90             12 
+#define ROBOT_SPEED                 20      // RPM
+#define ROBOT_TURN_SPEED            16      // RPM
 
 // ENCODER
 #define ENCODER_HOLES               30
 #define ENCODER_STEPS_X_CM          ENCODER_HOLES / WHEEL_CIRCUMFERENCE
-#define ENCODER_ISR_QUERY_INTERVAL  50      // microseconds
-#define TICKS_RPM_COUNTER           5      // Encoder holes to count before rpm calculations
+#define ENCODER_ISR_QUERY_INTERVAL  50      // Microseconds
+#define TICKS_RPM_COUNTER           5       // Encoder holes to count before rpm calculations
 
 // MOTOR
 /*#define SERVO_LEFT_FORWARD_SPEED    117
-#define SERVO_RIGHT_FORWARD_SPEED   42
-#define SERVO_LEFT_BACKWARD_SPEED   49
-#define SERVO_RIGHT_BACKWARD_SPEED  110*/
-#define SERVO_LEFT_FORWARD_SPEED    117
 #define SERVO_RIGHT_FORWARD_SPEED   0
 #define SERVO_LEFT_BACKWARD_SPEED   49
-#define SERVO_RIGHT_BACKWARD_SPEED  180
+#define SERVO_RIGHT_BACKWARD_SPEED  180*/
+#define MOTOR_PID_SAMPLE_TIME       10     // Milliseconds
+
+//k1,0.92,2.2,0
+//k2,2.2,4.2,0
+#define MOTOR_LEFT_PID_kP           0.92
+#define MOTOR_LEFT_PID_kI           2.20
+#define MOTOR_LEFT_PID_kD           0.00
+
+#define MOTOR_RIGHT_PID_kP          2.20
+#define MOTOR_RIGHT_PID_kI          4.20
+#define MOTOR_RIGHT_PID_kD          0.00
+
 
 // LIGHT
 #define STATE_LED_OFF               0
