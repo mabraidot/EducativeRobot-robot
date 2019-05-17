@@ -29,11 +29,11 @@
 #define MODE_SLAVE_SOUND            8
 
 // ROBOT DIMENTIONS
-#define WHEEL_CIRCUMFERENCE         26.5    // Wheel circumference in cm. Diameter times pi
+#define WHEEL_CIRCUMFERENCE         26.1    // Wheel circumference in cm. Diameter times pi
 #define DIDACTIC_MAP_BLOCK_SIZE     20      // Size of the map grid where robot moves on in cm
-#define CM_TO_ROTATE_90             12 
-#define ROBOT_SPEED                 20      // RPM
-#define ROBOT_TURN_SPEED            16      // RPM
+#define CM_TO_ROTATE_90             12.15 
+#define ROBOT_SPEED                 18      // RPM
+#define ROBOT_TURN_SPEED            18      // RPM
 
 // ENCODER
 #define ENCODER_HOLES               30
@@ -42,20 +42,14 @@
 #define TICKS_RPM_COUNTER           5       // Encoder holes to count before rpm calculations
 
 // MOTOR
-/*#define SERVO_LEFT_FORWARD_SPEED    117
-#define SERVO_RIGHT_FORWARD_SPEED   0
-#define SERVO_LEFT_BACKWARD_SPEED   49
-#define SERVO_RIGHT_BACKWARD_SPEED  180*/
 #define MOTOR_PID_SAMPLE_TIME       10     // Milliseconds
 
-//k1,0.92,2.2,0
-//k2,2.2,4.2,0
 #define MOTOR_LEFT_PID_kP           0.92
-#define MOTOR_LEFT_PID_kI           2.20
+#define MOTOR_LEFT_PID_kI           2.10
 #define MOTOR_LEFT_PID_kD           0.00
 
-#define MOTOR_RIGHT_PID_kP          2.20
-#define MOTOR_RIGHT_PID_kI          4.20
+#define MOTOR_RIGHT_PID_kP          1.40
+#define MOTOR_RIGHT_PID_kI          5.20
 #define MOTOR_RIGHT_PID_kD          0.00
 
 

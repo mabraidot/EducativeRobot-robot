@@ -41,7 +41,7 @@ void Motor::init(int encoder_pin, int input1, int input2){
 
 
 bool Motor::finished(void){
-    if(abs(_position) - encoder->getSteps() <= 1){
+    if(abs(_position) - encoder->getSteps() <= 0){
         return true;
     }else{
         return false;
@@ -92,7 +92,7 @@ void Motor::run(){
         _PID_input = (double) encoder->getRPM();
 
         if( steps > (_position*0.8) ){
-            _PID_setpoint = ROBOT_SPEED / 2;
+            _PID_setpoint = ROBOT_SPEED / 4;
         }
 
         speedPID->SetMode(AUTOMATIC);
@@ -109,7 +109,7 @@ void Motor::run(){
         }
 
         if(DEBUG){
-            static int serial_timelapse = 20;
+            static int serial_timelapse = 10;
             static unsigned long serial_timeout = millis() + serial_timelapse;
             if(serial_timeout < millis()){
                 serial_timeout = millis() + serial_timelapse;
