@@ -48,19 +48,19 @@ void Encoder::timerInterrupt(void){
     
     _micros += ENCODER_ISR_QUERY_INTERVAL;
     if(_RPM_counter >= TICKS_RPM_COUNTER){
-        _RPM = (float) (_RPM_counter * 60 * 1000 * 1000) / (ENCODER_HOLES * 2 * _micros);
+        _RPM = (float) (_RPM_counter * 60 * 1000 * 1000) / (ENCODER_HOLES * _micros);
         _RPM_counter = 0;
         _micros = 0;
     }
     
     // NO DEBOUNCING
-    // RPM counts rising and falling edge for twice precision. Change ENCODER_HOLES*2 on rpm calculation!
+    // RPM counts rising and falling edge for twice precision.
     if(digitalRead(_pin) != _state){
         _state = digitalRead(_pin);
         _RPM_counter++;
-        if(_state == LOW){
+        //if(_state == LOW){
             _steps++;
-        }
+        //}
     }
 
 

@@ -20,8 +20,6 @@ void Compiler::init(void){
 
     light->init();
 
-    //leftMotor->init(MOTOR_LEFT_ENCODER, MOTOR_LEFT_INPUT, SERVO_LEFT_FORWARD_SPEED, SERVO_LEFT_BACKWARD_SPEED);
-    //rightMotor->init(MOTOR_RIGHT_ENCODER, MOTOR_RIGHT_INPUT, SERVO_RIGHT_FORWARD_SPEED, SERVO_RIGHT_BACKWARD_SPEED);
     leftMotor->init(MOTOR_LEFT_ENCODER, MOTOR_LEFT_INPUT_1, MOTOR_LEFT_INPUT_2);
     rightMotor->init(MOTOR_RIGHT_ENCODER, MOTOR_RIGHT_INPUT_1, MOTOR_RIGHT_INPUT_2);
     leftMotor->speedPID->SetTunings(MOTOR_LEFT_PID_kP, MOTOR_LEFT_PID_kI, MOTOR_LEFT_PID_kD);
@@ -82,6 +80,11 @@ void Compiler::run(void){
         default: break;
     }
     
+
+
+    if(!rightMotor->finished()){
+        leftMotor->right_motor_steps = rightMotor->encoder->getSteps();
+    }
 
 }
 

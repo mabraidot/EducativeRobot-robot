@@ -4,21 +4,6 @@
 #include "motor.h"
 
 
-/*void Motor::init(int encoder_pin, int motor_pin, int forward_speed, int backward_speed){
-
-    encoder = new Encoder();
-    
-    servo = new SoftwareServo();
-    servo->setMinimumPulse(1200);
-    servo->setMaximumPulse(1800);
-
-    _pin = motor_pin;
-    _forward_speed = forward_speed;
-    _backward_speed = backward_speed;
-    
-    encoder->init(encoder_pin);
-
-}*/
 void Motor::init(int encoder_pin, int input1, int input2){
 
     speedPID = new PID(&_PID_input, &_PID_output, &_PID_setpoint,1,1,0, DIRECT);
@@ -32,7 +17,6 @@ void Motor::init(int encoder_pin, int input1, int input2){
     analogWrite(input2, 0);
 
     speedPID->SetSampleTime(MOTOR_PID_SAMPLE_TIME);
-    //speedPID->SetOutputLimits(140,255);
     speedPID->SetMode(MANUAL);
 
     encoder->init(encoder_pin);
@@ -59,7 +43,6 @@ void Motor::move(double new_position, byte rpm){
         _PID_setpoint = (double) rpm;
         _position = abs(new_position);
         _position_direction = new_position/abs(new_position);
-        //servo->attach(_pin);
         encoder->clear();
     }
 }
@@ -76,7 +59,6 @@ void Motor::stop(void){
     _PID_setpoint = 0;
     _position = 0;
     _position_direction = 1;
-    //servo->detach();
     analogWrite(_pin1, LOW);
     analogWrite(_pin2, LOW);
 }
@@ -98,7 +80,10 @@ void Motor::run(){
         speedPID->SetMode(AUTOMATIC);
         speedPID->Compute();
         _PWM = (int) abs(_PID_output);
-        //_PWM = (int) _PID_setpoint;
+
+        if(right_motor_steps >= 0 && right_motor_steps < steps){
+            _PWM = (int) _PWM * 0.7;
+        }
 
         if(_position_direction < 0){    // Backward
             analogWrite(_pin1, _PWM);
@@ -126,36 +111,6 @@ void Motor::run(){
                 debug.println(_PID_input);
             }
         }
-
-        /*if(_position_direction > 0){
-            _PWM = _forward_speed;
-        }else{
-            _PWM = _backward_speed;
-        }
-        servo->write(_PWM);
-        servo->refresh();
-
-        if(DEBUG){
-            static int serial_timelapse = 50;
-            static unsigned long serial_timeout = millis() + serial_timelapse;
-            if(serial_timeout < millis()){
-                
-                serial_timeout = millis() + serial_timelapse;
-
-                debug.print((_forward_speed > _backward_speed) ? "LEFT " : "RIGHT ");
-                debug.print("\t| Steps target: ");
-                debug.print(_position);
-                debug.print("\t| Steps: ");
-                debug.print((double)encoder->getSteps());
-                debug.print("\t| RPM: ");
-                debug.print((double)encoder->getRPM());
-                debug.print("\t| _PWM: ");
-                debug.print((double)_PWM);
-                debug.println("");
-                
-            }
-        }
-        */
 
     }
 

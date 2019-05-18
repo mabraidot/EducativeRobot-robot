@@ -6,11 +6,9 @@
 #define LIGHT_GREEN                 0
 #define LIGHT_BLUE                  A4
 #define MOTOR_LEFT_ENCODER          3
-//#define MOTOR_LEFT_INPUT            5   
 #define MOTOR_LEFT_INPUT_1          5   
 #define MOTOR_LEFT_INPUT_2          6
 #define MOTOR_RIGHT_ENCODER         4
-//#define MOTOR_RIGHT_INPUT           10
 #define MOTOR_RIGHT_INPUT_1         9
 #define MOTOR_RIGHT_INPUT_2         10
 #define SENSOR_LIGHT                A0
@@ -29,27 +27,27 @@
 #define MODE_SLAVE_SOUND            8
 
 // ROBOT DIMENTIONS
-#define WHEEL_CIRCUMFERENCE         26.1    // Wheel circumference in cm. Diameter times pi
+#define WHEEL_CIRCUMFERENCE         26.9    // Wheel circumference in cm. Diameter times pi
 #define DIDACTIC_MAP_BLOCK_SIZE     20      // Size of the map grid where robot moves on in cm
-#define CM_TO_ROTATE_90             12.15 
+#define CM_TO_ROTATE_90             11.7 
 #define ROBOT_SPEED                 18      // RPM
-#define ROBOT_TURN_SPEED            18      // RPM
+#define ROBOT_TURN_SPEED            16      // RPM
 
 // ENCODER
-#define ENCODER_HOLES               30
+#define ENCODER_HOLES               60
 #define ENCODER_STEPS_X_CM          ENCODER_HOLES / WHEEL_CIRCUMFERENCE
 #define ENCODER_ISR_QUERY_INTERVAL  50      // Microseconds
 #define TICKS_RPM_COUNTER           5       // Encoder holes to count before rpm calculations
 
 // MOTOR
 #define MOTOR_PID_SAMPLE_TIME       10     // Milliseconds
-
-#define MOTOR_LEFT_PID_kP           0.92
-#define MOTOR_LEFT_PID_kI           2.10
+//k1,0.5,4.2,0
+#define MOTOR_LEFT_PID_kP           0.50
+#define MOTOR_LEFT_PID_kI           4.20
 #define MOTOR_LEFT_PID_kD           0.00
-
-#define MOTOR_RIGHT_PID_kP          1.40
-#define MOTOR_RIGHT_PID_kI          5.20
+//k2,0.6,6.6,0
+#define MOTOR_RIGHT_PID_kP          0.60
+#define MOTOR_RIGHT_PID_kI          6.70
 #define MOTOR_RIGHT_PID_kD          0.00
 
 
