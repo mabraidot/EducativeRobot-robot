@@ -139,8 +139,8 @@ void loop(){
     compiler.run();
 
     /// TEST ////////////////
-    compiler.leftMotor->run();
-    compiler.rightMotor->run();
+    //compiler.leftMotor->run();
+    //compiler.rightMotor->run();
     /*if(compiler.leftMotor->servo->read() > 0 || compiler.rightMotor->servo->read() > 0){
         
         static unsigned long ttt = millis() + 2000;
