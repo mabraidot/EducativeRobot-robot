@@ -9,6 +9,7 @@ class Light {
 
         void init(void);
         void led(byte red_value, byte green_value, byte blue_value, byte mode);
+        void updatePWMTicks(void);
         
     private:
 

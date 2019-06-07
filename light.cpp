@@ -58,24 +58,38 @@ void Light::led(byte red_value, byte green_value, byte blue_value, byte mode){
         _handlePWM(LIGHT_RED, red_value);
         _handlePWM(LIGHT_GREEN, green_value);
         _handlePWM(LIGHT_BLUE, blue_value);
-        
       }
 
     }else if(mode == STATE_LED_ON){
       _handlePWM(LIGHT_RED, red_value);
       _handlePWM(LIGHT_GREEN, green_value);
       _handlePWM(LIGHT_BLUE, blue_value);
-      
     }
 
 }
 
 
+void Light::updatePWMTicks(void){
+
+  _previousMicros += ENCODER_ISR_QUERY_INTERVAL;
+  if(_previousMicros >= 16000){
+    for(int i = 0; i < 3; i++){
+      if (_pwmPins[i].pwmTickCount >= 255) {
+        _pwmPins[i].pwmTickCount = 0;
+      }else{
+        _pwmPins[i].pwmTickCount++;
+      }
+    }
+    _previousMicros = 0;
+  }
+
+}
+
 void Light::_handlePWM(int pin, int value){
     for(int i = 0; i < 3; i++){
         if(_pwmPins[i].pin == pin){
             
-            if(micros() - _previousMicros >= 1){
+            /*if(micros() - _previousMicros >= 1){
                 _pwmPins[i].pwmTickCount++;
     
                 if(_pwmPins[i].pinState == true){
@@ -91,6 +105,19 @@ void Light::_handlePWM(int pin, int value){
                 digitalWrite(_pwmPins[i].pin, _pwmPins[i].pinState);
                 _previousMicros = micros();
             }
+            */
+            if(_pwmPins[i].pinState == true){
+                if (_pwmPins[i].pwmTickCount >= value) {
+                    _pwmPins[i].pinState = false;
+                    digitalWrite(_pwmPins[i].pin, _pwmPins[i].pinState);
+                }
+            }else{
+                if (_pwmPins[i].pwmTickCount < value) {
+                    _pwmPins[i].pinState = true;
+                    digitalWrite(_pwmPins[i].pin, _pwmPins[i].pinState);
+                }
+            }
+            
 
         }
     }

@@ -113,6 +113,8 @@ void timerISR(void){
     compiler.leftMotor->encoder->timerInterrupt();
     compiler.rightMotor->encoder->timerInterrupt();
     
+    compiler.light->updatePWMTicks();
+
     Timer1.attachInterrupt( timerISR );
 }
 
