@@ -3,8 +3,14 @@
 #define RF_CE                       7
 #define RF_CSN                      8
 #define LIGHT_RED                   1
+#define LIGHT_RED_MASK_LOW          PORTD &= 0xFD
+#define LIGHT_RED_MASK_HIGH         PORTD |= 0x02
 #define LIGHT_GREEN                 0
+#define LIGHT_GREEN_MASK_LOW        PORTD &= 0xFE
+#define LIGHT_GREEN_MASK_HIGH       PORTD |= 0x01
 #define LIGHT_BLUE                  A4
+#define LIGHT_BLUE_MASK_LOW         PORTC &= 0xEF
+#define LIGHT_BLUE_MASK_HIGH        PORTC |= 0x10
 #define MOTOR_LEFT_ENCODER          3
 #define MOTOR_LEFT_INPUT_1          5   
 #define MOTOR_LEFT_INPUT_2          6

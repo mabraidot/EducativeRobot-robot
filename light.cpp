@@ -13,14 +13,20 @@ void Light::init(void){
     memset(_pwmPins,0,sizeof(_pwmPins));
     
     _pwmPins[0].pin = LIGHT_RED;
+    _pwmPins[0].pinMaksLow = LIGHT_RED_MASK_LOW;
+    _pwmPins[0].pinMaksHigh = LIGHT_RED_MASK_HIGH;
     _pwmPins[0].pinState = true;
     _pwmPins[0].pwmTickCount = 0;
 
     _pwmPins[1].pin = LIGHT_GREEN;
+    _pwmPins[1].pinMaksLow = LIGHT_GREEN_MASK_LOW;
+    _pwmPins[1].pinMaksHigh = LIGHT_GREEN_MASK_HIGH;
     _pwmPins[1].pinState = true;
     _pwmPins[1].pwmTickCount = 0;
 
     _pwmPins[2].pin = LIGHT_BLUE;
+    _pwmPins[2].pinMaksLow = LIGHT_BLUE_MASK_LOW;
+    _pwmPins[2].pinMaksHigh = LIGHT_BLUE_MASK_HIGH;
     _pwmPins[2].pinState = true;
     _pwmPins[2].pwmTickCount = 0;
     
@@ -109,12 +115,18 @@ void Light::_handlePWM(int pin, int value){
             if(_pwmPins[i].pinState == true){
                 if (_pwmPins[i].pwmTickCount >= value) {
                     _pwmPins[i].pinState = false;
-                    digitalWrite(_pwmPins[i].pin, _pwmPins[i].pinState);
+                    //digitalWrite(_pwmPins[i].pin, _pwmPins[i].pinState);
+                    //PORTD = PORTD & B11111100
+                    //PORTC = PORTC & B11101111
+                    _pwmPins[i].pinMaksLow;
                 }
             }else{
                 if (_pwmPins[i].pwmTickCount < value) {
                     _pwmPins[i].pinState = true;
-                    digitalWrite(_pwmPins[i].pin, _pwmPins[i].pinState);
+                    //digitalWrite(_pwmPins[i].pin, _pwmPins[i].pinState);
+                    //PORTD = PORTD | B00000011
+                    //PORTC = PORTC | B00010000
+                    _pwmPins[i].pinMaksHigh;
                 }
             }
             

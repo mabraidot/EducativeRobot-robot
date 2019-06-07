@@ -17,6 +17,8 @@ class Light {
 
         typedef struct {
             int pin;
+            byte pinMaksLow;
+            byte pinMaksHigh;
             bool pinState;
             int pwmTickCount;
         } _pwmPin;
