@@ -71,8 +71,8 @@ void Light::led(byte red_value, byte green_value, byte blue_value, byte mode){
 
 void Light::updatePWMTicks(void){
 
-  _previousMicros += ENCODER_ISR_QUERY_INTERVAL;
-  if(_previousMicros >= 16000){
+  //_previousMicros += ENCODER_ISR_QUERY_INTERVAL;
+  //if(_previousMicros >= 62){ // 60 Hz => 16000 / 256
     for(int i = 0; i < 3; i++){
       if (_pwmPins[i].pwmTickCount >= 255) {
         _pwmPins[i].pwmTickCount = 0;
@@ -80,8 +80,8 @@ void Light::updatePWMTicks(void){
         _pwmPins[i].pwmTickCount++;
       }
     }
-    _previousMicros = 0;
-  }
+  //  _previousMicros = 0;
+  //}
 
 }
 
