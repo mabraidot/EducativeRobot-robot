@@ -10,10 +10,7 @@
 /*       PUBLIC FUNCTIONS               */
 /*--------------------------------------*/
 void Compiler::init(void){
-    pinMode(LIGHT_RED, OUTPUT);
-    pinMode(LIGHT_GREEN, OUTPUT);
-    pinMode(LIGHT_BLUE, OUTPUT);
-
+    
     leftMotor = new Motor();
     rightMotor = new Motor();
     light = new Light();
@@ -130,7 +127,21 @@ void Compiler::moveTurnRight(void){
 
 void Compiler::headLights(byte color, byte mode){
 
-    light->led(color, mode);
+    //light->led(color, mode);
+
+    static int demo_interval = 1000;
+    static unsigned long demo_timeout = millis() + demo_interval;
+    static byte rvalue = 0;
+    static byte gvalue = 0;
+    static byte bvalue = 0;
+    if(demo_timeout < millis()){
+        rvalue = random(0,255);
+        gvalue = random(0,255);
+        bvalue = random(0,255);
+        demo_timeout = millis() + demo_interval;
+    }
+    
+    light->led(rvalue, gvalue, bvalue, mode);
     
 }
 

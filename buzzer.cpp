@@ -2,7 +2,6 @@
 #include "config.h"
 #include "buzzer.h"
 
-
 void Buzzer::init(void){
     pinMode(BUZZER, OUTPUT);
 }
@@ -63,6 +62,7 @@ void Buzzer::startUp(void){
         for(byte i = 0; i < 20; i+=2){
             //_note(i, 1500*sqrt((double)i), 200000/sqrt((double)i));
             //_note(i+1, 0, 50000/sqrt((double)i));
+            
             tone(BUZZER, 1500*sqrt((double)i), 200/sqrt((double)i));
             delay(250/sqrt((double)i));
             noTone(BUZZER);

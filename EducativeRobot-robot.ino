@@ -138,6 +138,8 @@ void loop(){
 
     compiler.run();
 
+    compiler.headLights(1, STATE_LED_ON);
+
     /// TEST ////////////////
     //compiler.leftMotor->run();
     //compiler.rightMotor->run();

@@ -8,7 +8,21 @@ class Light {
         Light() {};
 
         void init(void);
-        void led(byte color, byte mode);
+        void led(byte red_value, byte green_value, byte blue_value, byte mode);
+        
+    private:
+
+        void _handlePWM(int pin, int value);
+
+        typedef struct {
+            int pin;
+            bool pinState;
+            int pwmTickCount;
+        } _pwmPin;
+
+        _pwmPin _pwmPins[3];
+        unsigned long _previousMicros = 0;
+        
 
 };
 
