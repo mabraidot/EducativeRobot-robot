@@ -65,11 +65,9 @@ void process_serial(){
             case 'L': 
                 {
                     bool red = Serial.parseInt();
-                    bool yellow = Serial.parseInt();
+                    bool green = Serial.parseInt();
                     bool blue = Serial.parseInt();
-                    compiler.headLights(LIGHT_RED, red);
-                    compiler.headLights(LIGHT_GREEN, yellow);
-                    compiler.headLights(LIGHT_BLUE, blue);
+                    compiler.headLights(red, green, blue, STATE_LED_ON);
                 }
                 break;
             case 'K': 
@@ -140,21 +138,7 @@ void loop(){
 
     compiler.run();
 
-    compiler.headLights(1, STATE_LED_ON);
-
-    /// TEST ////////////////
-    //compiler.leftMotor->run();
-    //compiler.rightMotor->run();
-    /*if(compiler.leftMotor->servo->read() > 0 || compiler.rightMotor->servo->read() > 0){
-        
-        static unsigned long ttt = millis() + 2000;
-        if(millis() >= ttt){
-            compiler.leftMotor->servo->detach();
-            compiler.rightMotor->servo->detach();
-            ttt = millis() + 2000;
-        }
-    }
-    compiler.leftMotor->servo->refresh();
-    compiler.rightMotor->servo->refresh();
-    */
+    // TEST
+    compiler.headLights(STATE_LED_ON);
+    
 }

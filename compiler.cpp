@@ -125,9 +125,7 @@ void Compiler::moveTurnRight(void){
 }
 
 
-void Compiler::headLights(byte color, byte mode){
-
-    //light->led(color, mode);
+void Compiler::headLights(byte mode){
 
     static int demo_interval = 1000;
     static unsigned long demo_timeout = millis() + demo_interval;
@@ -135,14 +133,18 @@ void Compiler::headLights(byte color, byte mode){
     static byte gvalue = 0;
     static byte bvalue = 0;
     if(demo_timeout < millis()){
-        rvalue = random(0,255);
-        gvalue = random(0,255);
-        bvalue = random(0,255);
+        rvalue = random(256);
+        gvalue = random(256);
+        bvalue = random(256);
         demo_timeout = millis() + demo_interval;
     }
     
     light->led(rvalue, gvalue, bvalue, mode);
     
+}
+
+void Compiler::headLights(byte red_value, byte green_value, byte blue_value, byte mode){
+    light->led(red_value, green_value, blue_value, mode);
 }
 
 

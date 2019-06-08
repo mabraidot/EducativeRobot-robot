@@ -5,6 +5,7 @@
             "includePath": [
                 "${workspaceRoot}",
                 "C:\\Users\\mabra\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\**",
+                "C:\\Users\\mabra\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.6.22\\**",
                 "C:\\Users\\mabra\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.6.23\\**",
                 "C:\\Users\\mabra\\Documents\\Arduino\\libraries\\**",
                 "/opt/arduino-1.8.9/hardware/arduino/avr/**",
@@ -14,6 +15,7 @@
                 "UBRRH"
             ],
             "forcedInclude": [
+                "C:\\Users\\mabra\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.6.22\\cores\\arduino\\Arduino.h",
                 "C:\\Users\\mabra\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.6.23\\cores\\arduino\\Arduino.h",
                 "C:\\Users\\mabra\\Documents\\Arduino\\libraries\\**",
                 "/opt/arduino-1.8.9/hardware/arduino/avr/cores/arduino/Arduino.h"

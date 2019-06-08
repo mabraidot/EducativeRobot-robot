@@ -10,6 +10,8 @@ class Light {
         void init(void);
         void led(byte red_value, byte green_value, byte blue_value, byte mode);
         void updatePWMTicks(void);
+
+        volatile byte pwmTickCount = 0;
         
     private:
 
@@ -20,7 +22,6 @@ class Light {
             byte pinMaksLow;
             byte pinMaksHigh;
             bool pinState;
-            int pwmTickCount;
         } _pwmPin;
 
         _pwmPin _pwmPins[3];
