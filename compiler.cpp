@@ -47,6 +47,8 @@ void Compiler::run(void){
                 case MODE_SLAVE_BACKWARD_ARROW: moveBackward();         break;
                 case MODE_SLAVE_LEFT_ARROW:     moveTurnLeft();         break;
                 case MODE_SLAVE_RIGHT_ARROW:    moveTurnRight();        break;
+                case MODE_SLAVE_LIGHT:          waitLight();            break;
+                case MODE_SLAVE_SOUND:          waitSound();            break;
                 default: break;
             }
         }
@@ -65,6 +67,42 @@ void Compiler::run(void){
                     leftMotor->stop();
                     rightMotor->stop();
                     delay(400); // Little pause between actions
+                    // Send finishing code
+                    if(!rf.sendMessage("END", false)){
+                        debug.println("RF send of finishing code failed");
+                    }
+                    _action = 0;
+                }
+            }
+            break;
+
+        case MODE_SLAVE_LIGHT: 
+            {
+                /*debug.print("Light: ");
+                debug.print((double)analogRead(SENSOR_LIGHT));
+                debug.print("\tAverage: ");
+                debug.println((double)_average_light);
+                */
+                if(analogRead(SENSOR_LIGHT) > (_average_light + 50)){
+                    delay(400);
+                    // Send finishing code
+                    if(!rf.sendMessage("END", false)){
+                        debug.println("RF send of finishing code failed");
+                    }
+                    _action = 0;
+                }
+            }
+            break;
+
+        case MODE_SLAVE_SOUND: 
+            {
+                /*debug.print("Sound: ");
+                debug.print((double)analogRead(SENSOR_SOUND));
+                debug.print("\tAverage: ");
+                debug.println((double)_average_sound);
+                */
+                if(analogRead(SENSOR_SOUND) > (_average_sound + 10)){
+                    delay(400);
                     // Send finishing code
                     if(!rf.sendMessage("END", false)){
                         debug.println("RF send of finishing code failed");
@@ -148,6 +186,30 @@ void Compiler::headLights(byte red_value, byte green_value, byte blue_value, byt
 }
 
 
+void Compiler::waitLight(void){
+    delay(10);
+    _average_light = analogRead(SENSOR_LIGHT);
+    delay(10);
+    _average_light += analogRead(SENSOR_LIGHT);
+    delay(10);
+    _average_light += analogRead(SENSOR_LIGHT);
+    delay(10);
+    _average_light += analogRead(SENSOR_LIGHT);
+    _average_light = (int) _average_light / 4;
+}
+
+
+void Compiler::waitSound(void){
+    delay(10);
+    _average_sound = analogRead(SENSOR_SOUND);
+    delay(10);
+    _average_sound += analogRead(SENSOR_SOUND);
+    delay(10);
+    _average_sound += analogRead(SENSOR_SOUND);
+    delay(10);
+    _average_sound += analogRead(SENSOR_SOUND);
+    _average_sound = (int) _average_sound / 4;
+}
+
+
 //void Compiler::sound(byte sound_track);
-//void Compiler::waitLight(void);
-//void Compiler::waitSound(void);

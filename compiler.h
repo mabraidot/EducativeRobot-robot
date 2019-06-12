@@ -32,6 +32,9 @@ class Compiler {
     private:
     
         byte _action = 0;
+        int _average_light = 0;
+        int _average_sound = 0;
+        
         
 };
 

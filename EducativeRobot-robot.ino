@@ -131,6 +131,9 @@ void setup(){
     buzzer.init();
     buzzer.startUp();
 
+    //pinMode(SENSOR_LIGHT, INPUT);
+    //pinMode(SENSOR_SOUND, INPUT);
+
 }
 
 void loop(){
@@ -139,6 +142,15 @@ void loop(){
     compiler.run();
 
     // TEST
-    compiler.headLights(STATE_LED_ON);
-    
+    //compiler.headLights(STATE_LED_ON);
+    /*static int serial_timelapse = 10;
+    static unsigned long serial_timeout = millis() + serial_timelapse;
+    if(serial_timeout < millis()){
+        serial_timeout = millis() + serial_timelapse;
+
+        debug.print("Light: ");
+        debug.print((double)analogRead(SENSOR_LIGHT));
+        debug.print("\tSound: ");
+        debug.println((double)analogRead(SENSOR_SOUND));
+    }*/
 }

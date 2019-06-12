@@ -68,5 +68,5 @@
 #define RF_WAIT_TIMEOUT             7000    // milliseconds
 
 // GENERAL
-#define DEBUG                       false
+#define DEBUG                       true
 #define SILENT                      false
