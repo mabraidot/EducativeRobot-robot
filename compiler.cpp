@@ -83,7 +83,7 @@ void Compiler::run(void){
                 debug.print("\tAverage: ");
                 debug.println((double)_average_light);
                 */
-                if(analogRead(SENSOR_LIGHT) > (_average_light + 50)){
+                if(analogRead(SENSOR_LIGHT) > (_average_light + 200)){
                     delay(400);
                     // Send finishing code
                     if(!rf.sendMessage("END", false)){
