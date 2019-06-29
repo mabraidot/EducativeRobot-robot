@@ -47,8 +47,8 @@ void Compiler::run(void){
                 case MODE_SLAVE_BACKWARD_ARROW: moveBackward();         break;
                 case MODE_SLAVE_LEFT_ARROW:     moveTurnLeft();         break;
                 case MODE_SLAVE_RIGHT_ARROW:    moveTurnRight();        break;
-                case MODE_SLAVE_LIGHT:          waitLight();            break;
-                case MODE_SLAVE_SOUND:          waitSound();            break;
+                case MODE_SLAVE_WAIT_LIGHT:     waitLight();            break;
+                case MODE_SLAVE_WAIT_SOUND:     waitSound();            break;
                 default: break;
             }
         }
@@ -76,7 +76,7 @@ void Compiler::run(void){
             }
             break;
 
-        case MODE_SLAVE_LIGHT: 
+        case MODE_SLAVE_WAIT_LIGHT: 
             {
                 /*debug.print("Light: ");
                 debug.print((double)analogRead(SENSOR_LIGHT));
@@ -94,7 +94,7 @@ void Compiler::run(void){
             }
             break;
 
-        case MODE_SLAVE_SOUND: 
+        case MODE_SLAVE_WAIT_SOUND: 
             {
                 /*debug.print("Sound: ");
                 debug.print((double)analogRead(SENSOR_SOUND));
