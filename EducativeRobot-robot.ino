@@ -67,7 +67,7 @@ void process_serial(){
                     bool red = Serial.parseInt();
                     bool green = Serial.parseInt();
                     bool blue = Serial.parseInt();
-                    compiler.headLights(red, green, blue, STATE_LED_ON);
+                    //compiler.headLights(red, green, blue, STATE_LED_ON);
                 }
                 break;
             case 'K': 
@@ -140,17 +140,5 @@ void loop(){
     if (Serial.available()) process_serial();
 
     compiler.run();
-
-    // TEST
-    //compiler.headLights(STATE_LED_ON);
-    /*static int serial_timelapse = 10;
-    static unsigned long serial_timeout = millis() + serial_timelapse;
-    if(serial_timeout < millis()){
-        serial_timeout = millis() + serial_timelapse;
-
-        debug.print("Light: ");
-        debug.print((double)analogRead(SENSOR_LIGHT));
-        debug.print("\tSound: ");
-        debug.println((double)analogRead(SENSOR_SOUND));
-    }*/
+    
 }

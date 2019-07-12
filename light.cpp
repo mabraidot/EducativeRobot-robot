@@ -33,38 +33,62 @@ void Light::init(void){
 }
 
 
-void Light::led(byte red_value, byte green_value, byte blue_value, byte mode){
+//void Light::led(byte red_value, byte green_value, byte blue_value, byte mode){
+void Light::led(){
 	
-	if(mode == STATE_LED_BLINK){
-		static byte led_on = 1;
-		static int blink_interval = 500;
-		static unsigned long blink_timeout = millis() + blink_interval;
-		
-		if(blink_timeout < millis()){
-			led_on = !led_on;
-			blink_timeout = millis() + blink_interval;
-		}
-		if(led_on){
-			_handlePWM(LIGHT_RED, red_value);
-			_handlePWM(LIGHT_GREEN, green_value);
-			_handlePWM(LIGHT_BLUE, blue_value);
+	if(_activated || _mode != STATE_LED_OFF){
+		if(_mode == STATE_LED_BLINK){
+			static byte led_on = 1;
+			static int blink_interval = 500;
+			static unsigned long blink_timeout = millis() + blink_interval;
+			
+			if(blink_timeout < millis()){
+				led_on = !led_on;
+				blink_timeout = millis() + blink_interval;
+			}
+			if(led_on){
+				_handlePWM(LIGHT_RED, _red_value);
+				_handlePWM(LIGHT_GREEN, _green_value);
+				_handlePWM(LIGHT_BLUE, _blue_value);
+			}else{
+				_handlePWM(LIGHT_RED, 0);
+				_handlePWM(LIGHT_GREEN, 0);
+				_handlePWM(LIGHT_BLUE, 0);
+			}
+			_activated = true;
+			
+		}else if(_mode == STATE_LED_ON){
+			_handlePWM(LIGHT_RED, _red_value);
+			_handlePWM(LIGHT_GREEN, _green_value);
+			_handlePWM(LIGHT_BLUE, _blue_value);
+			_activated = true;
 		}else{
 			_handlePWM(LIGHT_RED, 0);
 			_handlePWM(LIGHT_GREEN, 0);
 			_handlePWM(LIGHT_BLUE, 0);
+			_activated = false;
 		}
-
-	}else if(mode == STATE_LED_ON){
-		_handlePWM(LIGHT_RED, red_value);
-		_handlePWM(LIGHT_GREEN, green_value);
-		_handlePWM(LIGHT_BLUE, blue_value);
-	}else{
-		_handlePWM(LIGHT_RED, 0);
-		_handlePWM(LIGHT_GREEN, 0);
-		_handlePWM(LIGHT_BLUE, 0);
 	}
 
 }
+
+
+void Light::ledMatrix(byte color){
+	_red_value 		= _led_matrix[color][0];
+	_green_value 	= _led_matrix[color][1];
+	_blue_value		= _led_matrix[color][2];
+	_mode 			= STATE_LED_ON;
+	_activated 		= true;
+}
+
+
+void Light::ledMatrixOff(void){
+	_red_value 		= 0;
+	_green_value 	= 0;
+	_blue_value		= 0;
+	_mode 			= STATE_LED_OFF;
+}
+
 
 
 void Light::updatePWMTicks(void){
@@ -91,7 +115,6 @@ void Light::_handlePWM(int pin, int value){
 					  case LIGHT_GREEN: PORTD &= _pwmPins[i].pinMaksLow; break;
 					  case LIGHT_BLUE:  PORTC &= _pwmPins[i].pinMaksLow; break;
 					}
-					//digitalWrite(_pwmPins[i].pin, _pwmPins[i].pinState);
 				}
 			}else{
 				if (pwmTickCount < value) {
@@ -101,7 +124,6 @@ void Light::_handlePWM(int pin, int value){
 					  case LIGHT_GREEN: PORTD |= _pwmPins[i].pinMaksHigh; break;
 					  case LIGHT_BLUE:  PORTC |= _pwmPins[i].pinMaksHigh; break;
 					}
-					//digitalWrite(_pwmPins[i].pin, _pwmPins[i].pinState);
 				}
 			}
 		}

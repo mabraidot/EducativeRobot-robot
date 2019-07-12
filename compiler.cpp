@@ -28,6 +28,14 @@ void Compiler::init(void){
 
 
 void Compiler::run(void){
+    
+    light->led();
+    static unsigned long led_millis = millis();
+    int led_timeout = 3000;
+    if(_action == 0 && (millis() - led_millis) > led_timeout){
+        light->ledMatrixOff();
+        led_millis = millis();
+    }
 
     // No instruction received
     if(_action == 0){
@@ -35,23 +43,32 @@ void Compiler::run(void){
             debug.print("Buffer: ");
             debug.println(rf.getBuffer());
             _action = rf.getNumberFromMessage(0, 2);
+            _action_value = rf.getNumberFromMessage(2, 2);
             debug.print("Action: ");
             debug.println(_action);
+            debug.print("Action value: ");
+            debug.println(_action_value);
             
             if(!rf.sendMessage("ACK", false)){
                 debug.println("RF send ACK response failed");
             }
 
             switch(_action){
-                case MODE_SLAVE_FORWARD_ARROW:  moveForward(false);     break;
-                case MODE_SLAVE_BACKWARD_ARROW: moveBackward();         break;
-                case MODE_SLAVE_LEFT_ARROW:     moveTurnLeft();         break;
-                case MODE_SLAVE_RIGHT_ARROW:    moveTurnRight();        break;
-                case MODE_SLAVE_WAIT_LIGHT:     waitLight();            break;
-                case MODE_SLAVE_WAIT_SOUND:     waitSound();            break;
+                case MODE_SLAVE_FORWARD_ARROW:  moveForward(false);             break;
+                case MODE_SLAVE_BACKWARD_ARROW: moveBackward();                 break;
+                case MODE_SLAVE_LEFT_ARROW:     moveTurnLeft();                 break;
+                case MODE_SLAVE_RIGHT_ARROW:    moveTurnRight();                break;
+                case MODE_SLAVE_WAIT_LIGHT:     waitLight();                    break;
+                case MODE_SLAVE_WAIT_SOUND:     waitSound();                    break;
+                case MODE_SLAVE_SOUND:          setBuzzerSound(_action_value);  break;
+                case MODE_SLAVE_LIGHT:          setHeadlight(_action_value);    break;
                 default: break;
             }
         }
+    }else{
+        // If headlights are on, we reset the timeout because
+        // we've received a new rf command
+        led_millis = millis();
     }
 
     switch(_action){
@@ -112,6 +129,30 @@ void Compiler::run(void){
             }
             break;
 
+        case MODE_SLAVE_SOUND: 
+            {
+                // Play tone and then send finished code
+                /*delay(400);
+                // Send finishing code
+                if(!rf.sendMessage("END", false)){
+                    debug.println("RF send of finishing code failed");
+                }
+                _action = 0;
+                */
+            }
+            break;
+
+        case MODE_SLAVE_LIGHT: 
+            {
+                delay(400);
+                // Send finishing code
+                if(!rf.sendMessage("END", false)){
+                    debug.println("RF send of finishing code failed");
+                }
+                _action = 0;
+            }
+            break;
+
         default: break;
     }
     
@@ -163,29 +204,6 @@ void Compiler::moveTurnRight(void){
 }
 
 
-void Compiler::headLights(byte mode){
-
-    static int demo_interval = 1000;
-    static unsigned long demo_timeout = millis() + demo_interval;
-    static byte rvalue = 0;
-    static byte gvalue = 0;
-    static byte bvalue = 0;
-    if(demo_timeout < millis()){
-        rvalue = random(256);
-        gvalue = random(256);
-        bvalue = random(256);
-        demo_timeout = millis() + demo_interval;
-    }
-    
-    light->led(rvalue, gvalue, bvalue, mode);
-    
-}
-
-void Compiler::headLights(byte red_value, byte green_value, byte blue_value, byte mode){
-    light->led(red_value, green_value, blue_value, mode);
-}
-
-
 void Compiler::waitLight(void){
     delay(10);
     _average_light = analogRead(SENSOR_LIGHT);
@@ -212,4 +230,11 @@ void Compiler::waitSound(void){
 }
 
 
-//void Compiler::sound(byte sound_track);
+void Compiler::setBuzzerSound(byte action_value){
+
+}
+
+
+void Compiler::setHeadlight(byte action_value){
+    light->ledMatrix(action_value);
+}

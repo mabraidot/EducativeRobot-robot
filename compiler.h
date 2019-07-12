@@ -17,12 +17,10 @@ class Compiler {
         void moveBackward(void);
         void moveTurnLeft(void);
         void moveTurnRight(void);
-        void sound(byte sound_track);
         void waitLight(void);
         void waitSound(void);
-        
-        void headLights(byte mode); // Random light color
-        void headLights(byte red_value, byte green_value, byte blue_value, byte mode); // Light color specified
+        void setBuzzerSound(byte action_value);
+        void setHeadlight(byte action_value);
         
         Motor *leftMotor;
         Motor *rightMotor;
@@ -32,6 +30,7 @@ class Compiler {
     private:
     
         byte _action = 0;
+        byte _action_value = 0;
         int _average_light = 0;
         int _average_sound = 0;
         
