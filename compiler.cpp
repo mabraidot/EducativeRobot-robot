@@ -31,7 +31,7 @@ void Compiler::run(void){
     
     light->led();
     static unsigned long led_millis = millis();
-    int led_timeout = 3000;
+    int led_timeout = 4000;
     if(_action == 0 && (millis() - led_millis) > led_timeout){
         light->ledMatrixOff();
         led_millis = millis();
@@ -131,14 +131,12 @@ void Compiler::run(void){
 
         case MODE_SLAVE_SOUND: 
             {
-                // Play tone and then send finished code
-                /*delay(400);
+                delay(400);
                 // Send finishing code
                 if(!rf.sendMessage("END", false)){
                     debug.println("RF send of finishing code failed");
                 }
                 _action = 0;
-                */
             }
             break;
 
@@ -231,7 +229,7 @@ void Compiler::waitSound(void){
 
 
 void Compiler::setBuzzerSound(byte action_value){
-
+    buzzer->toneMatrix(action_value, 3);
 }
 
 

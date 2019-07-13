@@ -53,6 +53,46 @@ void Buzzer::error(void){
 }
 
 
+void Buzzer::toneMatrix(byte theme, byte repetitions = 1){
+    char tone_notes[5][5] = {
+        " ",
+        "cCA ",
+        "abcd",
+        "AdAd",
+        "f A "
+    }; // a space represents a rest
+    int tone_beats[5][4] = {
+        { 0 },
+        { 4,6,10,8 },
+        { 4,4,4,4 },
+        { 8,4,8,4 },
+        { 8,4,8,4 }
+    };
+    int tone_tempo = 80;
+
+    byte tone_matrix_size = (sizeof(tone_notes) / sizeof(tone_notes[0])) - 1;
+    char names[] = { 'c', 'd', 'e', 'f', 'g', 'a', 'b', 'C', 'A' }; 
+    int tones[] = { 2110, 1880, 1675, 1581, 1409, 1255, 1118, 1055, 1184 };
+
+    for (int j = 0; j < repetitions; j++) {
+        for (int i = 0; i < tone_matrix_size; i++) {
+            if (tone_notes[theme][i] == ' ') {
+                delay(tone_beats[theme][i] * tone_tempo); // rest
+            } else {
+                for (int k = 0; k < sizeof(names); k++) {
+                    if (names[k] == tone_notes[theme][i]) {
+                        //playToneMatrix(tones[i], tone_beats[theme][i] * tone_tempo);
+                        tone(BUZZER, tones[k], tone_beats[theme][i] * tone_tempo);
+                        delay(tone_beats[theme][i] * tone_tempo * 1.2);
+                    }
+                }
+                noTone(BUZZER);
+            }
+        }
+    }
+}
+
+
 // Blocking sound, using delay
 void Buzzer::startUp(void){
     

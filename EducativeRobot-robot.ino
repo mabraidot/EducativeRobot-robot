@@ -130,10 +130,7 @@ void setup(){
 
     buzzer.init();
     buzzer.startUp();
-
-    //pinMode(SENSOR_LIGHT, INPUT);
-    //pinMode(SENSOR_SOUND, INPUT);
-
+    
 }
 
 void loop(){

@@ -10,7 +10,8 @@ class Buzzer {
         void init(void);
         void startSound(void);
         void stopSound(void);
-
+        void toneMatrix(byte theme, byte repetitions = 1);
+        
         void startUp(void);
         void error(void);
 

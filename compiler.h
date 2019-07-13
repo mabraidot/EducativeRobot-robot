@@ -1,5 +1,6 @@
 #include "motor.h"
 #include "light.h"
+#include "buzzer.h"
 
 #ifndef COMPILER_H
 #define COMPILER_H
@@ -26,6 +27,7 @@ class Compiler {
         Motor *rightMotor;
         
         Light *light;
+        Buzzer *buzzer;
     
     private:
     
