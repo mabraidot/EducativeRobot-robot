@@ -13,6 +13,7 @@ class Compiler {
 
         void init(void);
         void run(void);
+        void runFinished(void);
 
         void moveForward(bool until_wall_detected = false);
         void moveBackward(void);
@@ -35,6 +36,9 @@ class Compiler {
         byte _action_value = 0;
         int _average_light = 0;
         int _average_sound = 0;
+
+        int _light_timeout = 2000;
+        unsigned long _light_millis = 0;
         
         
 };
