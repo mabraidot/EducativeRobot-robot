@@ -33,6 +33,7 @@
 #define MODE_SLAVE_WAIT_SOUND       8
 #define MODE_SLAVE_SOUND            9
 #define MODE_SLAVE_LIGHT            10
+#define MODE_END_OF_PROGRAM         99
 
 // ROBOT DIMENTIONS
 #define WHEEL_CIRCUMFERENCE         26.9    // Wheel circumference in cm. Diameter times pi

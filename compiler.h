@@ -36,10 +36,6 @@ class Compiler {
         byte _action_value = 0;
         int _average_light = 0;
         int _average_sound = 0;
-
-        int _light_timeout = 2000;
-        unsigned long _light_millis = 0;
-        
         
 };
 
