@@ -68,6 +68,8 @@ void Compiler::run(void){
                 case MODE_SLAVE_SOUND:          setBuzzerSound(_action_value);  break;
                 case MODE_SLAVE_LIGHT:          setHeadlight(_action_value);    break;
                 case MODE_END_OF_PROGRAM:       light->ledMatrixOff();          break;
+                //case MODE_WHILE_START:          setObstacleSensor();            break;
+                //case MODE_WHILE_END:                                            break;
                 default: break;
             }
         }
@@ -128,6 +130,13 @@ void Compiler::run(void){
             }
             break;
 
+        case MODE_WHILE_START: 
+        case MODE_WHILE_END: 
+            {
+                runFinished();
+            }
+            break;
+        
         case MODE_END_OF_PROGRAM: 
             {
                 runFinished();
