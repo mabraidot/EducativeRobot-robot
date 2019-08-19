@@ -31,7 +31,6 @@ void Compiler::init(void){
 
 void Compiler::runFinished(void){
     
-    delay(400); // Little pause between actions
     // Send finishing code
     char* message = "END";
 
@@ -39,6 +38,7 @@ void Compiler::runFinished(void){
         message = "OBSTACLE";
         _action_while = 0;    
     }
+    delay(400); // Little pause between actions
     
     if(!rf.sendMessage(message, false)){
         debug.println("RF send of finishing code failed");
@@ -71,7 +71,7 @@ void Compiler::run(void){
             }
 
             switch(_action){
-                case MODE_SLAVE_FORWARD_ARROW:  moveForward();             break;
+                case MODE_SLAVE_FORWARD_ARROW:  moveForward();                  break;
                 case MODE_SLAVE_BACKWARD_ARROW: moveBackward();                 break;
                 case MODE_SLAVE_LEFT_ARROW:     moveTurnLeft();                 break;
                 case MODE_SLAVE_RIGHT_ARROW:    moveTurnRight();                break;
@@ -235,10 +235,12 @@ void Compiler::waitSound(void){
 
 
 void Compiler::setBuzzerSound(byte action_value){
+    distance->update_blocking();
     buzzer->toneMatrix(action_value, 3);
 }
 
 
 void Compiler::setHeadlight(byte action_value){
+    distance->update_blocking();
     light->ledMatrix(action_value);
 }

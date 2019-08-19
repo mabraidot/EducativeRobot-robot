@@ -26,6 +26,20 @@ void Distance::update(void){
 }
 
 
+void Distance::update_blocking(void){
+    unsigned long duration = 0;
+    
+    digitalWrite(SENSOR_ULTRASONIC_TRIGGER, LOW);
+    delay(2);
+    digitalWrite(SENSOR_ULTRASONIC_TRIGGER, HIGH);
+    delay(5);
+    digitalWrite(SENSOR_ULTRASONIC_TRIGGER, LOW);
+    duration = pulseInLong(SENSOR_ULTRASONIC_ECHO, HIGH, 5820);
+    _cm = (duration / 2) / 29.1;
+    
+}
+
+
 unsigned long Distance::get_distance(void){
     return _cm;
 }

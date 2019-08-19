@@ -9,6 +9,7 @@ class Distance {
 
         void init(void);
         void update(void);
+        void update_blocking(void);
         unsigned long get_distance(void);
         boolean obstacle_detected(void);
         boolean imminent_colition(void);
