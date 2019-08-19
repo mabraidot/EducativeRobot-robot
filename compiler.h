@@ -34,6 +34,8 @@ class Compiler {
     
         byte _action = 0;
         byte _action_value = 0;
+        byte _action_while = 0;
+        
         int _average_light = 0;
         int _average_sound = 0;
         

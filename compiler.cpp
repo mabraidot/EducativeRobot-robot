@@ -49,10 +49,13 @@ void Compiler::run(void){
             debug.println(rf.getBuffer());
             _action = rf.getNumberFromMessage(0, 2);
             _action_value = rf.getNumberFromMessage(2, 2);
+            _action_while = rf.getNumberFromMessage(4, 2);
             debug.print("Action: ");
             debug.println(_action);
             debug.print("Action value: ");
             debug.println(_action_value);
+            debug.print("Action while: ");
+            debug.println(_action_while);
             
             if(!rf.sendMessage("ACK", false)){
                 debug.println("RF send ACK response failed");
