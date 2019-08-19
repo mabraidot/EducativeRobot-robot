@@ -14,8 +14,10 @@ void Compiler::init(void){
     leftMotor = new Motor();
     rightMotor = new Motor();
     light = new Light();
+    distance = new Distance();
 
     light->init();
+    distance->init();
 
     leftMotor->init(MOTOR_LEFT_ENCODER, MOTOR_LEFT_INPUT_1, MOTOR_LEFT_INPUT_2);
     rightMotor->init(MOTOR_RIGHT_ENCODER, MOTOR_RIGHT_INPUT_1, MOTOR_RIGHT_INPUT_2);
@@ -31,7 +33,14 @@ void Compiler::runFinished(void){
     
     delay(400); // Little pause between actions
     // Send finishing code
-    if(!rf.sendMessage("END", false)){
+    char* message = "END";
+
+    if(_action_while > 0 && distance->obstacle_detected()){
+        message = "OBSTACLE";
+        _action_while = 0;    
+    }
+    
+    if(!rf.sendMessage(message, false)){
         debug.println("RF send of finishing code failed");
     }
     _action = 0;
@@ -41,7 +50,7 @@ void Compiler::runFinished(void){
 void Compiler::run(void){
     
     light->led();
-
+    
     // No instruction received
     if(_action == 0){
         if(rf.receiveMessage()){
@@ -62,7 +71,7 @@ void Compiler::run(void){
             }
 
             switch(_action){
-                case MODE_SLAVE_FORWARD_ARROW:  moveForward(false);             break;
+                case MODE_SLAVE_FORWARD_ARROW:  moveForward();             break;
                 case MODE_SLAVE_BACKWARD_ARROW: moveBackward();                 break;
                 case MODE_SLAVE_LEFT_ARROW:     moveTurnLeft();                 break;
                 case MODE_SLAVE_RIGHT_ARROW:    moveTurnRight();                break;
@@ -71,10 +80,17 @@ void Compiler::run(void){
                 case MODE_SLAVE_SOUND:          setBuzzerSound(_action_value);  break;
                 case MODE_SLAVE_LIGHT:          setHeadlight(_action_value);    break;
                 case MODE_END_OF_PROGRAM:       light->ledMatrixOff();          break;
-                //case MODE_WHILE_START:          setObstacleSensor();            break;
-                //case MODE_WHILE_END:                                            break;
                 default: break;
             }
+        }
+    }else if(_action_while > 0){
+        // Update sonar distance
+        distance->update();
+        
+        if(distance->imminent_colition()){
+            leftMotor->stop();
+            rightMotor->stop();
+            runFinished();
         }
     }
 
@@ -158,17 +174,12 @@ void Compiler::run(void){
 }
 
 
-void Compiler::moveForward(bool until_wall_detected = false){
+void Compiler::moveForward(){
     
-    if(!until_wall_detected){
-        int block_dimention = DIDACTIC_MAP_BLOCK_SIZE;
-        rightMotor->move(block_dimention, ROBOT_SPEED);
-        leftMotor->move(block_dimention, ROBOT_SPEED);
-    }else{
-        // @TODO: implement ultrasonic sensor to do unlimited run 
-        // until an obstacle is detected
-    }
-
+    int block_dimention = DIDACTIC_MAP_BLOCK_SIZE;
+    rightMotor->move(block_dimention, ROBOT_SPEED);
+    leftMotor->move(block_dimention, ROBOT_SPEED);
+    
 }
 
 

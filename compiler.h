@@ -1,6 +1,7 @@
 #include "motor.h"
 #include "light.h"
 #include "buzzer.h"
+#include "distance.h"
 
 #ifndef COMPILER_H
 #define COMPILER_H
@@ -15,7 +16,7 @@ class Compiler {
         void run(void);
         void runFinished(void);
 
-        void moveForward(bool until_wall_detected = false);
+        void moveForward(void);
         void moveBackward(void);
         void moveTurnLeft(void);
         void moveTurnRight(void);
@@ -29,6 +30,7 @@ class Compiler {
         
         Light *light;
         Buzzer *buzzer;
+        Distance *distance;
     
     private:
     
