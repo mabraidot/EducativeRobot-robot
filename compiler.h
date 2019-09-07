@@ -40,6 +40,7 @@ class Compiler {
         
         int _average_light = 0;
         int _average_sound = 0;
+        unsigned long _execution_time = 0;
         
 };
 

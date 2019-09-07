@@ -46,7 +46,7 @@ unsigned long Distance::get_distance(void){
 
 
 boolean Distance::obstacle_detected(void){
-    if(get_distance() > 2 && get_distance() <= DIDACTIC_MAP_BLOCK_SIZE){
+    if(get_distance() > 2 && get_distance() <= DIDACTIC_MAP_BLOCK_SIZE - 3){
         return true;
     }else{
         return false;

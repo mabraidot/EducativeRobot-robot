@@ -40,7 +40,7 @@
 // ROBOT DIMENTIONS
 #define WHEEL_CIRCUMFERENCE         26.9    // Wheel circumference in cm. Diameter times pi
 #define DIDACTIC_MAP_BLOCK_SIZE     20      // Size of the map grid where robot moves on in cm
-#define CM_TO_ROTATE_90             11.7 
+#define CM_TO_ROTATE_90             11.66 
 #define ROBOT_SPEED                 16      // RPM
 #define ROBOT_TURN_SPEED            16      // RPM
 

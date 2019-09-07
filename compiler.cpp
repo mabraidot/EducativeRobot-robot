@@ -44,6 +44,7 @@ void Compiler::runFinished(void){
         debug.println("RF send of finishing code failed");
     }
     _action = 0;
+    _execution_time = millis();
 
 }
 
@@ -81,6 +82,12 @@ void Compiler::run(void){
                 case MODE_SLAVE_LIGHT:          setHeadlight(_action_value);    break;
                 case MODE_END_OF_PROGRAM:       light->ledMatrixOff();          break;
                 default: break;
+            }
+
+        }else{
+            if((millis()-_execution_time) > 2000){
+                light->ledMatrixOff();
+                _execution_time = millis();
             }
         }
     }else if(_action_while > 0){
